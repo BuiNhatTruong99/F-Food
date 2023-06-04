@@ -58,13 +58,17 @@ var userSchema = new mongoose.Schema(
 
 // hash password before saving  :  1234 => $2b$05$rz6aM5P1ndlrQfBCRn8.O.gBhgA92T9Maur7u6DC.L9pwuPmwS0Ty
 userSchema.pre("save", async function (next) {
-
     if (!this.isModified("password")) return next();
 
     const salt = await bycrypt.genSalt(5);
     this.password = await bycrypt.hash(this.password, salt);
-
 });
 
+// check password
+userSchema.methods = {
+    comparePassword: async function (password) {
+        return await bycrypt.compare(password, this.password);
+    }
+}
 //Export the model
 module.exports = mongoose.model("User", userSchema);
