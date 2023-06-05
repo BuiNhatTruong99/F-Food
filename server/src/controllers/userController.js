@@ -3,6 +3,9 @@ const {
     generateAccessToken,
     generateRefreshToken,
 } = require("../middlewares/jwt");
+const jwt = require("jsonwebtoken");
+const sendMail = require("../utils/sendMail");
+const crypto = require("crypto");
 
 class UserController {
     // POST : register
@@ -36,8 +39,9 @@ class UserController {
         }
         try {
             /**
-             * refresh token => provide new access token
-             * access token => verify user
+             * Login =>
+             *  - refresh token => provide new access token
+             *  - access token => verify user
              */
 
             const response = await User.findOne({ email });
@@ -52,7 +56,7 @@ class UserController {
                 await User.findByIdAndUpdate(
                     userData._id,
                     { refreshToken },
-                    { new: true }
+                    { new: true } // new ? true => show document after update : false => show document before update
                 );
                 // save refresh token in cookie
                 res.cookie("refreshToken", refreshToken, {
@@ -73,14 +77,16 @@ class UserController {
         } catch (error) {
             return res.status(500).json({
                 success: false,
-                message: "Internal server error",
+                message: error.message,
             });
         }
     }
 
+    // Get : Current user
     getCurrent(req, res, next) {
         const { _id } = req.payload;
-        const user = User.findById(_id).select("-password -refreshToken -role")
+        User.findById(_id)
+            .select("-password -refreshToken -role") // select all field except password, refreshToken, role
             .then((user) => {
                 return res.status(200).json({
                     success: true,
@@ -88,6 +94,167 @@ class UserController {
                 });
             })
             .catch(next);
+    }
+
+    // Post : refresh token
+    async refreshAccessToken(req, res) {
+        const cookie = req.cookies; // get token from cookie
+        // check token valid or not
+        if (!cookie && !cookie.refreshToken) {
+            return res.status(400).json({
+                success: false,
+                message: "No refresh token in cookie",
+            });
+        }
+        // verify token
+        try {
+            const checkToken = jwt.verify(
+                cookie.refreshToken,
+                process.env.JWT_SECRET
+            );
+            // check token in database
+            const response = await User.findOne({
+                _id: checkToken._id,
+                refreshToken: cookie.refreshToken,
+            });
+            return res.status(200).json({
+                success: response ? true : false, // if response => true else false
+                accessToken: response
+                    ? generateAccessToken(response._id, response.role)
+                    : "Refresh token not match",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    // Get : logout
+    async logout(req, res) {
+        // get token from cookie
+        const cookie = req.cookies;
+        if (!cookie || !cookie.refreshToken) {
+            return res.status(400).json({
+                success: false,
+                message: "No refresh token in cookie",
+            });
+        }
+        try {
+            // set refresh token to empty string
+            await User.findOneAndUpdate(
+                { refreshToken: cookie.refreshToken },
+                { refreshToken: "" },
+                { new: true }
+            );
+            // delete refresh token in cookie
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: true,
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Logout success",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    /**
+     *  Client send request to server
+     *  => server check mail exist or not => if exist => send mail to user
+     *  => user click link in mail => redirect to api and get token
+     *  => server check token valid or not => if valid => update password
+     */
+
+    // Post : forgot password
+    async forgotPassword(req, res) {
+        const { email } = req.query;
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing email",
+            });
+        }
+        try {
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Email not found",
+                });
+            }
+            const resetToken = user.createPasswordChangeToken(); // create token
+            await user.save();
+            // create mail content
+            const html = `Please click on the link below to change your password. This link will expire in 10 minutes from now
+            . <a href="${process.env.URL_SERVER}/api/user/reset-password/${resetToken}">Click here</a>`;
+            const data = {
+                email,
+                html,
+            };
+            // send mail
+            const rs = await sendMail(data);
+            return res.status(200).json({
+                success: true,
+                rs,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    // Put : reset password
+    async resetPassword(req, res, next) {
+        // get token from body
+        const { token, password } = req.body;
+        if (!token || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing token or password",
+            });
+        }
+        try {
+            // hash token
+            const passwordResetToken = crypto
+                .createHash("sha256")
+                .update(token)
+                .digest("hex");
+            // check token in database
+            const user = await User.findOne({
+                passwordResetToken,
+                passwordResetExpires: { $gt: Date.now() },
+            });
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Token invalid or expired",
+                });
+            }
+            // update password
+            user.password = password;
+            user.passwordResetToken = undefined; // set token to undefined
+            user.passwordResetExpires = undefined; // set token expire time to undefined
+            user.passwordChangeAt = Date.now(); // set password change time
+            await user.save();
+            return res.status(200).json({
+                success: true,
+                message: user ? "Password changed" : "Something went wrong",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
     }
 }
 
