@@ -6,6 +6,7 @@ const {
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const crypto = require("crypto");
+const { log } = require("console");
 
 class UserController {
     // POST : register
@@ -28,6 +29,12 @@ class UserController {
         }
     }
 
+    /**
+     * Login =>
+     *  - refresh token => provide new access token
+     *  - access token => verify user
+     */
+
     // POST : login
     async login(req, res) {
         const { email, password } = req.body;
@@ -38,20 +45,15 @@ class UserController {
             });
         }
         try {
-            /**
-             * Login =>
-             *  - refresh token => provide new access token
-             *  - access token => verify user
-             */
-
             const response = await User.findOne({ email });
             if (response && (await response.comparePassword(password))) {
                 // distructure password and role from response
-                const { password, role, ...userData } = response.toObject();
+                const { password, role, refreshToken, ...userData } =
+                    response.toObject();
                 // generate access token
                 const accessToken = generateAccessToken(userData._id, role);
                 // generate refresh token
-                const refreshToken = generateRefreshToken(userData._id);
+                const newRefreshToken = generateRefreshToken(userData._id);
                 // save refresh token in database
                 await User.findByIdAndUpdate(
                     userData._id,
@@ -59,7 +61,7 @@ class UserController {
                     { new: true } // new ? true => show document after update : false => show document before update
                 );
                 // save refresh token in cookie
-                res.cookie("refreshToken", refreshToken, {
+                res.cookie("refreshToken", newRefreshToken, {
                     httpOnly: true,
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                 });
@@ -89,7 +91,7 @@ class UserController {
             .select("-password -refreshToken -role") // select all field except password, refreshToken, role
             .then((user) => {
                 return res.status(200).json({
-                    success: true,
+                    success: user ? true : false,
                     response: user ? user : "User not found",
                 });
             })
@@ -248,6 +250,84 @@ class UserController {
             return res.status(200).json({
                 success: true,
                 message: user ? "Password changed" : "Something went wrong",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    // GET : get all user
+    async getAllUser(req, res) {
+        const response = await User.find().select("-password -refreshToken -role");
+        return res.status(200).json({
+            success: response ? true : false,
+            user: response,
+        });
+    }
+
+    // DELETE : delete user
+    async deleteUser(req, res) {
+        const { _id } = req.query;
+        try {
+            if (!_id) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Missing id",
+                });
+            }
+            const response = await User.findByIdAndDelete(_id);
+            return res.status(200).json({
+                success: response ? true : false,
+                deleteUser: response ? `User deleted : ${response.email}` : "User not found",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    // PUT : update user - user role
+    async updateUser(req, res) {
+        const { _id } = req.payload;
+        if (!_id || Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing input",
+            });
+        }
+        try {
+            const { role, ...data } = req.body;
+            const response = await User.findByIdAndUpdate(_id, data, { new: true }).select("-password -refreshToken -role");
+            return res.status(200).json({
+                success: response ? true : false,
+                updateUser: response ? response : "Something went wrong",
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+    // PUT : update user - admin role
+    async updateUserByAdmin(req, res) {
+        const { _id } = req.params;
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing input",
+            });
+        }
+        try {
+            const response = await User.findByIdAndUpdate(_id, req.body, { new: true }).select("-password -refreshToken -role");
+            return res.status(200).json({
+                success: response ? true : false,
+                updateUser: response ? response : "Something went wrong",
             });
         } catch (error) {
             return res.status(500).json({

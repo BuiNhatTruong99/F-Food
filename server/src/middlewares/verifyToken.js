@@ -23,6 +23,19 @@ const verifyAccessToken = (req, res, next) => {
 
 }
 
+// check if user is admin
+const isAdmin = (req, res, next) => {
+    const { role } = req.payload;  // get role from payload
+    if (role !== "admin") {
+        return res.status(403).json({
+            sucess: false,
+            message: "You are not admin",
+        });
+    }
+    next();
+}
+
 module.exports = {
-    verifyAccessToken
+    verifyAccessToken,
+    isAdmin
 }
