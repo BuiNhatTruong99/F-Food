@@ -34,6 +34,17 @@ var producSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
         },
+        ratings: [
+            {
+                star: { type: Number },
+                postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+                comment: { type: String }
+            }
+        ],
+        totalRating: {
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true }
 );
