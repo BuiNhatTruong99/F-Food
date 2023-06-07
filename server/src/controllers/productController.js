@@ -124,7 +124,6 @@ class ProductController {
         const hadRating = ratingProduct?.ratings?.find(
             (element) => element.postedBy.toString() === _id.toString()
         );
-        console.log(hadRating);
         if (hadRating) {
             // update rating
             await Product.updateOne(
@@ -132,7 +131,8 @@ class ProductController {
                     ratings: { $elemMatch: hadRating },
                 },
                 {
-                    $set: { "ratings.$.star": star, "ratings.$.comment": comment }, // set new star and comment
+                    // set new star and comment
+                    $set: { "ratings.$.star": star, "ratings.$.comment": comment },
                 },
                 { new: true }
             );
@@ -141,13 +141,25 @@ class ProductController {
             await Product.findByIdAndUpdate(
                 pid,
                 {
-                    $push: { ratings: { star, comment, postedBy: _id } }, // push rating to ratings array
+                    // push rating to ratings array
+                    $push: { ratings: { star, comment, postedBy: _id } },
                 },
                 { new: true }
             );
         }
+
+        // - Sum rating
+        const totalRatingProduct = await Product.findById(pid);
+        // get count of rating of this product
+        const ratingLength = totalRatingProduct.ratings.length;
+        // sum all star of this product
+        const sumRating = totalRatingProduct.ratings.reduce((sum, cur) => sum + cur.star, 0);
+        // calculate average rating
+        totalRatingProduct.totalRating = Math.round(sumRating * 10 / ratingLength) / 10;
+        await totalRatingProduct.save();
         return res.status(200).json({
             status: true,
+            totalRatingProduct
         });
     });
 }
