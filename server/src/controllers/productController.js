@@ -162,6 +162,17 @@ class ProductController {
             totalRatingProduct
         });
     });
+
+    // PUT : Upload image
+    uploadProductImage = asyncHandler(async (req, res) => {
+        const { pid } = req.params;
+        if (!req.file) throw new Error("No image sent");
+        const updateProd = await Product.findByIdAndUpdate(pid, { image: req.file.path }, { new: true });
+        res.status(200).json({
+            status: updateProd ? true : false,
+            data: updateProd ? updateProd : "Cannot update product",
+        });
+    });
 }
 
 module.exports = new ProductController();

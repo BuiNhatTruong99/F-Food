@@ -4,6 +4,7 @@ const categoryRoute = require('./productCategory');
 const blogcategoryRoute = require('./blogCategory');
 const blogRoute = require('./blog');
 const couponRoute = require('./coupon');
+const orderRoute = require('./order');
 const { notFound, errorHandler } = require('../middlewares/errHandle')
 
 function route(app) {
@@ -13,6 +14,7 @@ function route(app) {
     app.use('/api/blogcategory', blogcategoryRoute);
     app.use('/api/blog', blogRoute);
     app.use('/api/coupon', couponRoute);
+    app.use('/api/order', orderRoute);
 
     // check if route is not found
     app.use(notFound);

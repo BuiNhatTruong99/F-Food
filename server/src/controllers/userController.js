@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const asyncHandler = require("express-async-handler");
 const {
     generateAccessToken,
     generateRefreshToken,
@@ -6,7 +7,6 @@ const {
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const crypto = require("crypto");
-const { log } = require("console");
 
 class UserController {
     // POST : register
@@ -336,6 +336,39 @@ class UserController {
             });
         }
     }
+
+    // PUT : update address
+    updateUserAddress = asyncHandler(async (req, res) => {
+        const { _id } = req.payload;
+        if (!req.body.address) throw new Error("Missing address");
+        const response = await User.findByIdAndUpdate(_id, { $push: { address: req.body.address } }, { new: true }).select("-password -refreshToken -role");
+        return res.status(200).json({
+            success: response ? true : false,
+            updateUser: response ? response : "Something went wrong",
+        });
+    });
+
+    // PUT : update cart
+    updateUserCart = asyncHandler(async (req, res) => {
+        const { _id } = req.payload;
+        const { pid, quantity } = req.body;
+        if (!pid || !quantity) throw new Error("Missing input");
+        const userCart = await User.findById(_id).select("cart");
+        const productInCart = await userCart.cart.find((item) => item.product.toString() === pid);
+        if (productInCart) {
+            const response = await User.updateOne({ cart: { $elemMatch: productInCart } }, { $set: { "cart.$.quantity": quantity } }, { new: true })
+            return res.status(200).json({
+                success: response ? true : false,
+                updateUser: response ? response : "Something went wrong",
+            });
+        } else {
+            const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity } } }, { new: true }).select("-password -refreshToken -role");
+            return res.status(200).json({
+                success: response ? true : false,
+                updateUser: response ? response : "Something went wrong",
+            });
+        }
+    });
 }
 
 module.exports = new UserController();

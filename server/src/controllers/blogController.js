@@ -163,6 +163,16 @@ class BlogController {
             });
         }
     });
+
+    uploadBlogImage = asyncHandler(async (req, res) => {
+        const { bid } = req.params;
+        if (!req.file) throw new Error("No image sent");
+        const updateBlog = await Blog.findByIdAndUpdate(bid, { image: req.file.path }, { new: true });
+        res.status(200).json({
+            status: updateBlog ? true : false,
+            data: updateBlog ? updateBlog : "Cannot update product",
+        });
+    });
 }
 
 module.exports = new BlogController();
