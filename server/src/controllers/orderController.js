@@ -10,17 +10,17 @@ class OrderController {
         const { coupon } = req.body;
         const userCart = await User.findById(_id).select('cart').populate('cart.product', 'name price');
         // get each product [idprod, quantity] item in cart 
-        const products = await userCart?.cart.map(item => ({
+        const products = await userCart?.cart?.map(item => ({
             product: item.product._id,
             quantity: item.quantity,
         }));
         // sum total price of all products in cart
-        let total = userCart?.cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+        let total = userCart?.cart?.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
         const orderData = { products, total, orderedBy: _id };
         // if user has coupon, apply discount
         if (coupon) {
             const selectCoupon = await Coupon.findById(coupon);
-            total = Math.round(total * (1 - selectCoupon?.discount / 100) / 1000) * 1000 || total;
+            total = Math.round(total * (1 - (selectCoupon?.discount / 100))) || total;
             orderData.coupon = coupon;
             orderData.total = total;
         }
