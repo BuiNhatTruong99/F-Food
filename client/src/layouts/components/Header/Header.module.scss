@@ -58,7 +58,7 @@
     }
 
     &:hover {
-        color: #ff514e;
+        color: var(--hover-color);
     }
 }
 
@@ -67,6 +67,7 @@
     display: flex;
     align-items: center;
     margin-left: auto;
+    cursor: pointer;
     transform: translateX(-8px);
 }
 
@@ -78,7 +79,7 @@
     color: var(--white);
 
     &:hover .navbar__cart_qty {
-        background-color: #ff514e;
+        background-color: var(--hover-color);
     }
 
     svg {
@@ -104,6 +105,7 @@
 }
 
 .navbar__login {
+    position: relative;
     margin-left: 30px;
     display: flex;
     align-items: center;
@@ -128,7 +130,13 @@
     }
 
     button:hover {
-        background-color: #ff514e;
+        background-color: var(--hover-color);
+    }
+
+    &:hover .navbar__right-options {
+        opacity: 1;
+        visibility: visible;
+        top: 60px;
     }
 }
 
@@ -136,4 +144,46 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+}
+
+.navbar__right-options {
+    position: absolute;
+    width: max-content;
+    right: 0;
+    top: 70px;
+    background-color: #fff;
+    padding: 5px 0;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+
+    &:before {
+        position: absolute;
+        right: 12px;
+        top: -19.5px;
+        content: '';
+        border: 10.5px solid transparent;
+        border-bottom-color: #fff;
+    }
+}
+
+.navbar__right-item {
+    line-height: 1.8;
+    padding: 6px 15px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+
+    svg {
+        margin-right: 10px;
+    }
+
+    &:hover {
+        background-color: #ecebeb;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.132);
+    }
 }

@@ -3,7 +3,16 @@ import style from './Header.module.scss';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { faHome, faNewspaper, faShoppingCart, faStore, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import {
+    faHome,
+    faNewspaper,
+    faRightToBracket,
+    faShoppingCart,
+    faStore,
+    faTags,
+    faUser,
+    faUtensils,
+} from '@fortawesome/free-solid-svg-icons';
 import images from '~/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
@@ -26,28 +35,29 @@ function Header() {
     return (
         <header className={sticky ? cx('wrapper', 'sticky') : cx('wrapper')}>
             <div className={cx('inner')}>
-                <Link className={cx('logo')} to="">
+                <Link className={cx('logo')} to="/">
                     <img src={images.logo} alt="FFood" />
                 </Link>
                 <div className={cx('navbar__left')}>
                     <ul className={cx('navbar__list')}>
-                        <li className={cx('navbar__item')}>
+                        <Link className={cx('navbar__item')} to="/">
                             <FontAwesomeIcon icon={faHome} /> Home
-                        </li>
-                        <li className={cx('navbar__item')}>
+                        </Link>
+                        <Link className={cx('navbar__item')} to="/menu">
                             <FontAwesomeIcon icon={faUtensils} />
                             Menu
-                        </li>
-                        <li className={cx('navbar__item')}>
+                        </Link>
+                        <Link className={cx('navbar__item')} to="/news">
                             <FontAwesomeIcon icon={faNewspaper} />
                             News
-                        </li>
-                        <li className={cx('navbar__item')}>
+                        </Link>
+                        <Link className={cx('navbar__item')} to="/store-system">
                             <FontAwesomeIcon icon={faStore} />
                             Store locations
-                        </li>
+                        </Link>
                     </ul>
                 </div>
+
                 <div className={cx('navbar__right')}>
                     {currentUser ? (
                         <>
@@ -57,6 +67,7 @@ function Header() {
                                     <div className={cx('navbar__cart_qty')}>0</div>
                                 </div>
                             </Tippy>
+
                             <div className={cx('navbar__login')}>
                                 <img
                                     className={cx('navbar__avatar')}
@@ -64,6 +75,19 @@ function Header() {
                                     alt="avatar"
                                 />
                                 <div className={cx('navbar__username')}>Last Name</div>
+                                <ul className={cx('navbar__right-options')}>
+                                    <li className={cx('navbar__right-item')}>
+                                        <FontAwesomeIcon icon={faUser} /> My account
+                                    </li>
+                                    <li className={cx('navbar__right-item')}>
+                                        <FontAwesomeIcon icon={faTags} />
+                                        My wishlist
+                                    </li>
+                                    <li className={cx('navbar__right-item')}>
+                                        <FontAwesomeIcon icon={faRightToBracket} />
+                                        Log out
+                                    </li>
+                                </ul>
                             </div>
                         </>
                     ) : (

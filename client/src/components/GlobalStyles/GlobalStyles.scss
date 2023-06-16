@@ -11,6 +11,7 @@
     --primary: #fbb403;
     --white: #fff;
     --text-color: #000000d6;
+    --hover-color: #ff514e;
 
     --default-layout-header-hight: 65px;
     --default-layout-width: 1280px;
@@ -43,4 +44,11 @@ body {
     .tippy-content {
         padding: 4px 10px;
     }
+}
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
 }
