@@ -58,7 +58,7 @@
     }
 
     &:hover {
-        color: var(--hover-color);
+        color: var(--orange-color);
     }
 }
 
@@ -79,7 +79,7 @@
     color: var(--white);
 
     &:hover .navbar__cart_qty {
-        background-color: var(--hover-color);
+        background-color: var(--orange-color);
     }
 
     svg {
@@ -130,7 +130,7 @@
     }
 
     button:hover {
-        background-color: var(--hover-color);
+        background-color: var(--orange-color);
     }
 
     &:hover .navbar__right-options {

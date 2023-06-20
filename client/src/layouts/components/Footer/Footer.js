@@ -4,8 +4,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import style from './Footer.module.scss';
 import classNames from 'classnames/bind';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationPin, faMailBulk, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faMailBulk, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { FaceBookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from '~/components/Icons/Icon';
 
 const cx = classNames.bind(style);
 
@@ -52,8 +55,22 @@ function Footer() {
                                 <FontAwesomeIcon icon={faMailBulk} /> <span>ffood@gmail.com</span>
                             </div>
                             <div className={cx('footer_content-address-contact')}>
-                                <FontAwesomeIcon icon={faLocationPin} /> <span>888 Tp.HCM, VietNam</span>
+                                <FontAwesomeIcon icon={faLocationDot} /> <span>888 Tp.HCM, VietNam</span>
                             </div>
+                        </div>
+                        <div className={cx('footer_content-social')}>
+                            <Tippy content="Facebook" placement="bottom-end">
+                                <FaceBookIcon />
+                            </Tippy>
+                            <Tippy content="Twitter" placement="bottom-end">
+                                <TwitterIcon />
+                            </Tippy>
+                            <Tippy content="Instagram" placement="bottom-end">
+                                <InstagramIcon />
+                            </Tippy>
+                            <Tippy content="Youtube" placement="bottom-end">
+                                <YoutubeIcon />
+                            </Tippy>
                         </div>
                     </Col>
                     <Col className={cx('footer__content-item')}>
@@ -61,9 +78,9 @@ function Footer() {
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5126380715246!2d106.70092417905299!3d10.771993661984503!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f43fd97af5f%3A0x88ba5dd71b15433c!2zQml0ZXhjbyBUb3dlciwgaOG6u20gc-G7kSAyIEjDoG0gTmdoaSwgQuG6v24gTmdow6ksIFF14bqtbiAxLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2sus!4v1686901061899!5m2!1svi!2sus"
                                 style={{ border: 0, width: '100%', height: '100%' }}
-                                allowfullscreen
                                 loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"
+                                allowFullScreen
+                                referrerPolicy="no-referrer-when-downgrade"
                             ></iframe>
                         </div>
                     </Col>

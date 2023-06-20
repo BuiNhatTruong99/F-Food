@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import {
+    faCartShopping,
     faHome,
     faNewspaper,
     faRightToBracket,
@@ -63,7 +64,7 @@ function Header() {
                         <>
                             <Tippy content="Your cart" placement="bottom">
                                 <div className={cx('navbar__cart')}>
-                                    <FontAwesomeIcon icon={faShoppingCart} />
+                                    <FontAwesomeIcon icon={faCartShopping} />
                                     <div className={cx('navbar__cart_qty')}>0</div>
                                 </div>
                             </Tippy>
@@ -71,7 +72,7 @@ function Header() {
                             <div className={cx('navbar__login')}>
                                 <img
                                     className={cx('navbar__avatar')}
-                                    src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/8945b78461e843b6377df40e1fa5f061~c5_100x100.jpeg?x-expires=1686927600&x-signature=ruT%2BjcE%2F3VWZyhgAt6dB63Ib%2Fcs%3D"
+                                    src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/42a81079b5885e152707b170d63ba2df~c5_100x100.jpeg?x-expires=1687320000&x-signature=URbj%2FpO4%2FKgYzqD2%2BxDCTcpHXSI%3D"
                                     alt="avatar"
                                 />
                                 <div className={cx('navbar__username')}>Last Name</div>
