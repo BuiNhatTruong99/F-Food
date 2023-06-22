@@ -63,3 +63,33 @@ export const YoutubeIcon = React.forwardRef(({ width = '2.5rem', height = '2.5re
         <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"></path>
     </svg>
 ));
+
+export const StartIcon = React.forwardRef(({ width = '2rem', height = '2rem', className }, ref) => (
+    <svg
+        ref={ref}
+        className={className}
+        width={width}
+        height={height}
+        focusable="false"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        style={{ fill: 'rgb(251 180 3)' }}
+    >
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+    </svg>
+));
+
+export const StartBorderIcon = React.forwardRef(({ width = '2rem', height = '2rem', className }, ref) => (
+    <svg
+        ref={ref}
+        className={className}
+        width={width}
+        height={height}
+        focusable="false"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        style={{ fill: 'rgb(251 180 3)' }}
+    >
+        <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path>
+    </svg>
+));

@@ -18,46 +18,41 @@ function Home() {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 4500,
+        autoplaySpeed: 6000,
         infinite: true,
         accessibility: false,
         dotsClass: `slick-dots ${style.dots}`,
     };
 
     return (
-        <>
-            <section className={cx('home-banners')}>
-                <div className={cx('slide')}>
-                    <Slider {...settings}>
-                        {analysis.map((item, index) => (
-                            <div key={index} className={cx('home-banner')}>
-                                <div
-                                    className={cx('home-banner-item')}
-                                    style={{ backgroundImage: `url(${item.image})` }}
-                                >
-                                    <Container className={cx('home-banner-item__layout')}>
-                                        <div className={cx('home-banner-item__container')}>
-                                            <div className={cx('home-banner-item__title')}>{item.title}</div>
-                                            <div className={cx('home-banner-item__content')}>
-                                                {item.content} <strong>{item.key_word}</strong>
-                                            </div>
-                                            <div className={cx('home-banner-item__button')}>
-                                                <button className={cx('btn-order')}>
-                                                    <span className={cx('btn-label')}>
-                                                        <FontAwesomeIcon icon={faBasketShopping} />
-                                                        ORDER NOW
-                                                    </span>
-                                                </button>
-                                            </div>
+        <section className={cx('home-banners')}>
+            <div className={cx('slide')}>
+                <Slider {...settings}>
+                    {analysis.map((item, index) => (
+                        <div key={index} className={cx('home-banner')}>
+                            <div className={cx('home-banner-item')} style={{ backgroundImage: `url(${item.image})` }}>
+                                <Container className={cx('home-banner-item__layout')}>
+                                    <div className={cx('home-banner-item__container')}>
+                                        <div className={cx('home-banner-item__title')}>{item.title}</div>
+                                        <div className={cx('home-banner-item__content')}>
+                                            {item.content} <strong>{item.key_word}</strong>
                                         </div>
-                                    </Container>
-                                </div>
+                                        <div className={cx('home-banner-item__button')}>
+                                            <button className={cx('btn-order')}>
+                                                <span className={cx('btn-label')}>
+                                                    <FontAwesomeIcon icon={faBasketShopping} />
+                                                    ORDER NOW
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Container>
                             </div>
-                        ))}
-                    </Slider>
-                </div>
-            </section>
-        </>
+                        </div>
+                    ))}
+                </Slider>
+            </div>
+        </section>
     );
 }
 
