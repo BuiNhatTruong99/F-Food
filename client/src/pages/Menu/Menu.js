@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import style from './Menu.module.scss';
 import image from '~/assets/images';
 import { StartBorderIcon, StartIcon } from '~/components/Icons';
 import { getCategories } from '~/redux/asyncActions';
+import { Container } from 'react-bootstrap';
+import MenuContent from './MenuContent/MenuContent';
 
 const cx = classNames.bind(style);
 
@@ -18,36 +18,37 @@ function Menu() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const { categories } = useSelector((state) => state.app);
+
+    const [activeCategory, setActiveCategory] = useState(0);
     return (
         <section className={cx('menu')}>
             <section className={cx('banner')}>
-                <h1 className={cx('banner__title')}>Menu</h1>
+                <h1 className={cx('banner__title')}>Menu Today</h1>
                 <div className={cx('banner__paths')}>
-                    <Link to={'/'} className={cx('banner__path')}>
-                        Home
-                    </Link>
-                    <FontAwesomeIcon icon={faEllipsis} />
-                    <Link to={'/menu'} className={cx('banner__path')}>
-                        Menu
-                    </Link>
+                    <span className={cx('banner__path')}>Quality, taste and service attitude are our criteria</span>
                 </div>
             </section>
-            <div className={cx('menu__layout')}>
+            <Container className={cx('menu__layout')}>
                 <div className={cx('menu__container')}>
                     <div className={cx('menu-filters')}>
                         <h2 className={cx('menu-filters__title')}>Foods</h2>
-                        <ul className={cx('menu-filters__foods')}>
+                        <div className={cx('menu-filters__foods')}>
                             {categories?.map((prodCategory) => (
                                 <NavLink
                                     key={prodCategory._id}
-                                    to={prodCategory.name}
-                                    className={cx('menu-filters__item')}
+                                    // to={prodCategory.name}
+                                    className={
+                                        activeCategory === prodCategory._id
+                                            ? cx('menu-filters__item', 'selected')
+                                            : cx('menu-filters__item')
+                                    }
+                                    onClick={() => setActiveCategory(prodCategory._id)}
                                 >
                                     <img src={image[prodCategory.icon]} alt="burger" />
                                     <span className={cx('menu-filters__item-name')}>{prodCategory.name}</span>
                                 </NavLink>
                             ))}
-                        </ul>
+                        </div>
                         <h2 className={cx('menu-filters__title')}>Price</h2>
                         <form className={cx('menu-filters__price')}>
                             <label className={cx('check')}>
@@ -97,9 +98,9 @@ function Menu() {
                             <span>&amp; up</span>
                         </div>
                     </div>
-                    <div className={cx('menu-content')}></div>
+                    <MenuContent />
                 </div>
-            </div>
+            </Container>
         </section>
     );
 }

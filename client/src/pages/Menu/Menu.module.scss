@@ -36,11 +36,7 @@ $menu-image: url('../../assets/images/banner.jpg');
         padding: 7px;
         text-transform: capitalize;
         color: var(--white);
-        transition: all 0.2s ease-in-out;
-
-        &:hover {
-            color: var(--orange-color);
-        }
+        font-style: italic;
     }
     svg {
         color: var(--white);
@@ -52,6 +48,7 @@ $menu-image: url('../../assets/images/banner.jpg');
 }
 
 .menu__container {
+    display: flex;
     margin-bottom: 30px;
 }
 
@@ -76,7 +73,7 @@ $menu-image: url('../../assets/images/banner.jpg');
     padding: 10px 12px;
     margin: 3px 0;
     border-radius: 6px;
-    transition: all 0.25s ease-in-out;
+    transition: all 0.15s ease-in-out;
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.08);
@@ -93,7 +90,10 @@ $menu-image: url('../../assets/images/banner.jpg');
         margin-left: 10px;
     }
 }
-
+.selected {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--orange-color);
+}
 .menu-filters__price {
     padding: 0 12px;
 }
@@ -157,9 +157,4 @@ $menu-image: url('../../assets/images/banner.jpg');
         font-size: 1.4rem;
         font-weight: 500;
     }
-}
-
-.menu-content {
-    display: flex;
-    flex: 1 1;
 }
