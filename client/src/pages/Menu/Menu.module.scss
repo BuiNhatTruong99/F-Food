@@ -98,49 +98,6 @@ $menu-image: url('../../assets/images/banner.jpg');
     padding: 0 12px;
 }
 
-.check {
-    position: relative;
-    display: flex;
-    align-items: center;
-    font-size: 1.4rem;
-    margin: 3px 0;
-    padding: 10px 30px;
-    cursor: pointer;
-
-    .check-radio {
-        display: none;
-    }
-
-    .checkmark {
-        position: absolute;
-        content: '';
-        top: 50%;
-        left: 0;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        transform: translateY(-50%);
-        border: 3px solid rgba(0, 0, 0, 0.4);
-        transition: all 0.2s ease-out;
-    }
-
-    .check-radio:checked ~ .checkmark {
-        border: 3px solid var(--orange-color);
-    }
-
-    .check-radio:checked ~ .checkmark::after {
-        position: absolute;
-        content: '';
-        top: 50%;
-        left: 50%;
-        width: 1.2rem;
-        height: 1.2rem;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        background-color: var(--orange-color);
-    }
-}
-
 .shop-filters__stars {
     display: flex;
     align-items: center;

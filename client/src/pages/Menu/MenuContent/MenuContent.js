@@ -72,9 +72,7 @@ function MenuContent() {
                     </ul>
                 </div>
             </div>
-            <div className={cx('menu-products')}>
-                <ProductItem />
-            </div>
+            <ProductItem />
         </div>
     );
 }

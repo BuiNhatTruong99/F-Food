@@ -8,9 +8,16 @@ import { StartBorderIcon, StartIcon } from '~/components/Icons';
 import { getCategories } from '~/redux/asyncActions';
 import { Container } from 'react-bootstrap';
 import MenuContent from './MenuContent/MenuContent';
-import { setSelectedCategory } from '~/redux/appSlice';
+import { setSelectedCategory, setSelectedPrice } from '~/redux/appSlice';
+import CheckBox from '~/components/CheckBox';
 
 const cx = classNames.bind(style);
+const priceOptions = [
+    { content: 'Above $100', range: { gt: 100 } },
+    { content: '$50 to $99', range: { gte: 50, lte: 99 } },
+    { content: '$20 to $49', range: { gte: 20, lte: 49 } },
+    { content: 'Under $20', range: { lt: 20 } },
+];
 
 function Menu() {
     const dispatch = useDispatch();
@@ -55,26 +62,14 @@ function Menu() {
                         </div>
                         <h2 className={cx('menu-filters__title')}>Price</h2>
                         <form className={cx('menu-filters__price')}>
-                            <label className={cx('check')}>
-                                <input type="radio" name="Radio" className={cx('check-radio')} />
-                                <span className={cx('checkmark')}></span>
-                                Under $10
-                            </label>
-                            <label className={cx('check')}>
-                                <input type="radio" name="Radio" className={cx('check-radio')} />
-                                <span className={cx('checkmark')}></span>
-                                $10 to 30$
-                            </label>
-                            <label className={cx('check')}>
-                                <input type="radio" name="Radio" className={cx('check-radio')} />
-                                <span className={cx('checkmark')}></span>
-                                $30 to 50$
-                            </label>
-                            <label className={cx('check')}>
-                                <input type="radio" name="Radio" className={cx('check-radio')} />
-                                <span className={cx('checkmark')}></span>
-                                Above $50
-                            </label>
+                            {priceOptions.map(({ content, range }) => (
+                                <CheckBox
+                                    key={content}
+                                    value={content}
+                                    content={content}
+                                    handleOptionClick={() => dispatch(setSelectedPrice(range))}
+                                />
+                            ))}
                         </form>
                         <h2 className={cx('menu-filters__title')}>Rate</h2>
                         <div className={cx('shop-filters__stars')}>

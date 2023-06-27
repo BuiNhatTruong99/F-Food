@@ -6,12 +6,17 @@ export const appSlice = createSlice({
     initialState: {
         categories: [],
         selectCategories: '',
+        selectedPrice: '',
         isLoading: false,
     },
 
     reducers: {
         setSelectedCategory: (state, action) => {
             state.selectCategories = action.payload;
+        },
+
+        setSelectedPrice: (state, action) => {
+            state.selectedPrice = action.payload;
         },
     },
 
@@ -22,7 +27,7 @@ export const appSlice = createSlice({
         });
 
         builder.addCase(actions.getCategories.fulfilled, (state, action) => {
-            state.isLoading = false;
+            // state.isLoading = false;
             state.categories = action.payload;
         });
 
@@ -34,6 +39,6 @@ export const appSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const { setSelectedCategory } = appSlice.actions;
+export const { setSelectedCategory, setSelectedPrice } = appSlice.actions;
 
 export default appSlice.reducer;
