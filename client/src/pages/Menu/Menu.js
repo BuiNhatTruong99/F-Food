@@ -8,6 +8,7 @@ import { StartBorderIcon, StartIcon } from '~/components/Icons';
 import { getCategories } from '~/redux/asyncActions';
 import { Container } from 'react-bootstrap';
 import MenuContent from './MenuContent/MenuContent';
+import { setSelectedCategory } from '~/redux/appSlice';
 
 const cx = classNames.bind(style);
 
@@ -42,7 +43,10 @@ function Menu() {
                                             ? cx('menu-filters__item', 'selected')
                                             : cx('menu-filters__item')
                                     }
-                                    onClick={() => setActiveCategory(prodCategory._id)}
+                                    onClick={() => {
+                                        setActiveCategory(prodCategory._id);
+                                        dispatch(setSelectedCategory(prodCategory.name));
+                                    }}
                                 >
                                     <img src={image[prodCategory.icon]} alt="burger" />
                                     <span className={cx('menu-filters__item-name')}>{prodCategory.name}</span>

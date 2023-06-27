@@ -1,8 +1,8 @@
 import axios from '~/ultils/axios';
 
-export const apiGetProducts = (param) =>
+export const apiGetProducts = (params) =>
     axios({
         method: 'GET',
-        url: '/product',
-        param,
+        url: '/product/',
+        params,
     });

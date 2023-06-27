@@ -16,7 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import images from '~/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 const cx = classNames.bind(style);
 
@@ -61,7 +61,7 @@ function Header() {
 
                 <div className={cx('navbar__right')}>
                     {currentUser ? (
-                        <>
+                        <Fragment>
                             <Tippy content="Your cart" placement="bottom">
                                 <div className={cx('navbar__cart')}>
                                     <FontAwesomeIcon icon={faCartShopping} />
@@ -90,9 +90,9 @@ function Header() {
                                     </li>
                                 </ul>
                             </div>
-                        </>
+                        </Fragment>
                     ) : (
-                        <>
+                        <Fragment>
                             <div className={cx('navbar__cart')}>
                                 <FontAwesomeIcon icon={faShoppingCart} />
                                 <div className={cx('navbar__cart_qty')}>0</div>
@@ -100,7 +100,7 @@ function Header() {
                             <div className={cx('navbar__login')}>
                                 <button>Login</button>
                             </div>
-                        </>
+                        </Fragment>
                     )}{' '}
                 </div>
             </div>

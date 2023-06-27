@@ -5,10 +5,15 @@ export const appSlice = createSlice({
     name: 'app',
     initialState: {
         categories: [],
+        selectCategories: '',
         isLoading: false,
     },
 
-    reducers: {},
+    reducers: {
+        setSelectedCategory: (state, action) => {
+            state.selectCategories = action.payload;
+        },
+    },
 
     // Code logic xử lý async action
     extraReducers: (builder) => {
@@ -29,6 +34,6 @@ export const appSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const {} = appSlice.actions;
+export const { setSelectedCategory } = appSlice.actions;
 
 export default appSlice.reducer;
