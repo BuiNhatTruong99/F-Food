@@ -2,12 +2,18 @@
     display: flex;
     flex-direction: column;
     flex: 1 1;
+
+    --search-btn-width: 3rem;
+    --search-hight: 41px;
+    --search-top-spacer: 9px;
+    // --search-btn-width: 52px;s
 }
 
 .menu-handle {
     display: flex;
 }
 .menu-handle__search {
+    position: relative;
     display: flex;
     align-items: center;
     flex: 1 1;
@@ -15,13 +21,47 @@
     padding: 5px 15px;
     margin-left: 30px;
     border: 1px solid rgba(0, 0, 0, 0.15);
+    background-color: rgba(22, 24, 35, 0.06);
 
     input {
         font-size: 1.4rem;
         outline: none;
         border: none;
         width: 100%;
-        background-color: var(--white);
+        background-color: transparent;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: calc(var(--search-top-spacer));
+        height: calc(var(--search-hight) - var(--search-top-spacer) * 2);
+        right: calc(var(--search-btn-width) + 16px);
+        width: 1px;
+        background-color: rgba(22, 24, 35, 0.12);
+    }
+
+    .clear,
+    .loading {
+        position: absolute;
+        right: calc(var(--search-btn-width) + 26px);
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(22, 24, 35, 0.34);
+        background-color: transparent;
+    }
+
+    .loading {
+        animation: spinner 1s linear infinite;
+    }
+
+    @keyframes spinner {
+        from {
+            transform: translateY(-50%) rotate(0);
+        }
+        to {
+            transform: translateY(-50%) rotate(360deg);
+        }
     }
 
     .menu-handle__search-btn {
@@ -53,6 +93,8 @@
     }
     svg {
         margin-left: auto;
+        width: 1.7rem;
+        height: 1.7rem;
     }
 }
 

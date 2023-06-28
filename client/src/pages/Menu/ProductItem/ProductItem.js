@@ -14,21 +14,21 @@ function ProductItem() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const menuState = useSelector((state) => state.app);
-    const { selectCategories, selectedPrice } = menuState;
+    const { selectCategories, selectedPrice, searchValue } = useSelector((state) => state.app);
 
     const fetchProducts = async () => {
-        let categoryParams = {};
-        let priceParams = {};
-        if (selectedPrice) {
-            priceParams = { price: selectedPrice };
-        }
-        if (selectCategories) {
-            categoryParams = { category: selectCategories };
-        }
+        let categoryParams = selectCategories ? { category: selectCategories } : {};
+        let priceParams = selectedPrice ? { price: selectedPrice } : {};
+        let searchParams = searchValue ? { name: encodeURIComponent(searchValue) } : {};
+
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
-        const response = await apiGetProducts({ sort: '-createdAt', ...categoryParams, ...priceParams });
+        const response = await apiGetProducts({
+            sort: '-createdAt',
+            ...categoryParams,
+            ...priceParams,
+            ...searchParams,
+        });
         if (response.status) {
             const sortedProducts = response.products;
 
@@ -44,7 +44,7 @@ function ProductItem() {
     useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [menuState]);
+    }, [selectCategories, selectedPrice, searchValue]);
     return (
         <Fragment>
             {isLoading ? (

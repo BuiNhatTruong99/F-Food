@@ -48,6 +48,13 @@ body {
     }
 }
 
+button,
+input,
+[tabindex] {
+    outline: none;
+    border: none;
+}
+
 html *::-webkit-scrollbar {
     border-radius: 0;
     width: 8px;
