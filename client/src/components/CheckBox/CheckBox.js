@@ -8,7 +8,7 @@ function CheckBox({ content, handleOptionClick }) {
         <label onClick={handleOptionClick} className={cx('check')}>
             <input type="radio" name="Radio" className={cx('check-radio')} value={content} />
             <span className={cx('checkmark')}></span>
-            {content}
+            <span className={cx('content-text')}>{content}</span>
         </label>
     );
 }

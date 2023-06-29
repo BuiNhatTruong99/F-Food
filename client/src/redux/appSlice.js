@@ -7,6 +7,7 @@ export const appSlice = createSlice({
         categories: [],
         selectCategories: '',
         selectedPrice: '',
+        selectedRate: '',
         searchValue: '',
         isLoading: false,
     },
@@ -18,6 +19,10 @@ export const appSlice = createSlice({
 
         setSelectedPrice: (state, action) => {
             state.selectedPrice = action.payload;
+        },
+
+        setSelectedRate: (state, action) => {
+            state.selectedRate = action.payload;
         },
 
         setInputSearchValue: (state, action) => {
@@ -44,6 +49,6 @@ export const appSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const { setSelectedCategory, setSelectedPrice, setInputSearchValue } = appSlice.actions;
+export const { setSelectedCategory, setSelectedPrice, setInputSearchValue, setSelectedRate } = appSlice.actions;
 
 export default appSlice.reducer;

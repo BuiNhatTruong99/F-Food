@@ -14,12 +14,13 @@ function ProductItem() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const { selectCategories, selectedPrice, searchValue } = useSelector((state) => state.app);
+    const { selectCategories, selectedPrice, searchValue, selectedRate } = useSelector((state) => state.app);
 
     const fetchProducts = async () => {
         let categoryParams = selectCategories ? { category: selectCategories } : {};
         let priceParams = selectedPrice ? { price: selectedPrice } : {};
         let searchParams = searchValue ? { name: encodeURIComponent(searchValue) } : {};
+        let rateParams = selectedRate ? { totalRating: selectedRate } : {};
 
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -28,6 +29,7 @@ function ProductItem() {
             ...categoryParams,
             ...priceParams,
             ...searchParams,
+            ...rateParams,
         });
         if (response?.products) {
             const updatedProducts = response.products.map((product) => ({
@@ -43,7 +45,7 @@ function ProductItem() {
     useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectCategories, selectedPrice, searchValue]);
+    }, [selectCategories, selectedPrice, searchValue, selectedRate]);
     return (
         <Fragment>
             {isLoading ? (

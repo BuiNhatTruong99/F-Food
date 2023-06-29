@@ -8,7 +8,7 @@ import { StartBorderIcon, StartIcon } from '~/components/Icons';
 import { getCategories } from '~/redux/asyncActions';
 import { Container } from 'react-bootstrap';
 import MenuContent from './MenuContent/MenuContent';
-import { setSelectedCategory, setSelectedPrice } from '~/redux/appSlice';
+import { setSelectedCategory, setSelectedPrice, setSelectedRate } from '~/redux/appSlice';
 import CheckBox from '~/components/CheckBox';
 
 const cx = classNames.bind(style);
@@ -17,6 +17,12 @@ const priceOptions = [
     { content: '$50 to $99', range: { gte: 50, lte: 99 } },
     { content: '$20 to $49', range: { gte: 20, lte: 49 } },
     { content: 'Under $20', range: { lt: 20 } },
+];
+
+const starFilters = [
+    { key: 1, filledStars: 5, borderStars: 0, range: { gte: 5 } },
+    { key: 2, filledStars: 4, borderStars: 1, range: { gte: 4 } },
+    { key: 3, filledStars: 3, borderStars: 2, range: { gte: 3 } },
 ];
 
 function Menu() {
@@ -28,12 +34,16 @@ function Menu() {
     const { categories } = useSelector((state) => state.app);
 
     const [activeCategory, setActiveCategory] = useState(0);
+    const [activeRate, setActiveRate] = useState(0);
+
     return (
         <section className={cx('menu')}>
             <section className={cx('banner')}>
-                <h1 className={cx('banner__title')}>Menu Today</h1>
+                <h1 className={cx('banner__title')}>Menu</h1>
                 <div className={cx('banner__paths')}>
-                    <span className={cx('banner__path')}>Quality, taste and service attitude are our criteria</span>
+                    <span className={cx('banner__slogan')}>
+                        "Where Food is Art, Every Dish a Masterpiece of Flavors"
+                    </span>
                 </div>
             </section>
             <Container className={cx('menu__layout')}>
@@ -72,30 +82,28 @@ function Menu() {
                             ))}
                         </form>
                         <h2 className={cx('menu-filters__title')}>Rate</h2>
-                        <div className={cx('shop-filters__stars')}>
-                            <StartIcon />
-                            <StartIcon />
-                            <StartIcon />
-                            <StartIcon />
-                            <StartIcon />
-                            <span>&amp; up</span>
-                        </div>
-                        <div className={cx('shop-filters__stars')}>
-                            <StartIcon />
-                            <StartIcon />
-                            <StartIcon />
-                            <StartIcon />
-                            <StartBorderIcon />
-                            <span>&amp; up</span>
-                        </div>
-                        <div className={cx('shop-filters__stars')}>
-                            <StartIcon />
-                            <StartIcon />
-                            <StartIcon />
-                            <StartBorderIcon />
-                            <StartBorderIcon />
-                            <span>&amp; up</span>
-                        </div>
+                        {starFilters.map((filter) => (
+                            <div
+                                key={filter.key}
+                                className={
+                                    activeRate === filter.key
+                                        ? cx('shop-filters__stars', 'rate-selected')
+                                        : cx('shop-filters__stars')
+                                }
+                                onClick={() => {
+                                    dispatch(setSelectedRate(filter.range));
+                                    setActiveRate(filter.key);
+                                }}
+                            >
+                                {Array.from({ length: filter.filledStars }, (_, index) => (
+                                    <StartIcon key={`filled-${filter.key}-${index}`} />
+                                ))}
+                                {Array.from({ length: filter.borderStars }, (_, index) => (
+                                    <StartBorderIcon key={`border-${filter.key}-${index}`} />
+                                ))}
+                                <span>&amp; up</span>
+                            </div>
+                        ))}
                     </div>
                     <MenuContent />
                 </div>

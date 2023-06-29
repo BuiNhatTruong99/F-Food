@@ -28,6 +28,10 @@
         border: 3px solid var(--orange-color);
     }
 
+    .check-radio:checked ~ .content-text {
+        color: var(--orange-color);
+    }
+
     .check-radio:checked ~ .checkmark::after {
         position: absolute;
         content: '';

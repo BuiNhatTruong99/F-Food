@@ -1,4 +1,4 @@
-$menu-image: url('../../assets/images/banner.jpg');
+$menu-image: url('../../assets/images/menu-banner.png');
 
 .menu {
     margin-bottom: 80px;
@@ -30,8 +30,8 @@ $menu-image: url('../../assets/images/banner.jpg');
     justify-content: center;
     margin-top: 5px;
 
-    .banner__path {
-        font-size: 1.4rem;
+    .banner__slogan {
+        font-size: 1.5rem;
         margin: 5px;
         padding: 7px;
         text-transform: capitalize;
@@ -113,5 +113,15 @@ $menu-image: url('../../assets/images/banner.jpg');
         margin-left: 4px;
         font-size: 1.4rem;
         font-weight: 500;
+    }
+}
+
+.rate-selected {
+    svg {
+        fill: var(--orange-color) !important;
+    }
+
+    span {
+        color: var(--orange-color);
     }
 }
