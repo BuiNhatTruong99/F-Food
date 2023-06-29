@@ -24,20 +24,19 @@ function ProductItem() {
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
         const response = await apiGetProducts({
-            sort: '-createdAt',
+            sort: '-totalRating',
             ...categoryParams,
             ...priceParams,
             ...searchParams,
         });
-        if (response.status) {
-            const sortedProducts = response.products;
-
-            const updatedProducts = sortedProducts.map((product, index) => ({
+        if (response?.products) {
+            const updatedProducts = response.products.map((product) => ({
                 ...product,
-                newProduct: index < 6,
+                favouritePro: product.totalRating >= 4,
             }));
             setProducts(updatedProducts);
         }
+
         setIsLoading(false);
     };
 
@@ -57,10 +56,10 @@ function ProductItem() {
                         <div key={product._id} className={cx('menu-products-layout__item')}>
                             <span
                                 className={
-                                    product.newProduct ? cx('menu-prodcuts-new', 'new-tag') : cx('menu-prodcuts-new')
+                                    product.favouritePro ? cx('menu-prodcuts-new', 'new-tag') : cx('menu-prodcuts-new')
                                 }
                             >
-                                New
+                                Favourite
                             </span>
                             <div className={cx('menu-prodcuts-layout__hover-icon')}>
                                 <button className={cx('menu-prodcuts__addcart-btn')}>
@@ -70,7 +69,13 @@ function ProductItem() {
                                     <FaRegHeart />
                                 </button>
                             </div>
-                            <img src={product.image} alt="" className={cx('menu-products-layout__item-img')} />
+                            <div className={cx('menu-products-layout__item-img-layout')}>
+                                <img
+                                    src={product.thumb}
+                                    alt={product.thumb}
+                                    className={cx('menu-products-layout__item-img')}
+                                />
+                            </div>
                             <div className={cx('menu-products-layout__item-info')}>
                                 <div className={cx('product__item-info-text')}>
                                     <span className={cx('product__item-info-text-name')}>{product.name}</span>

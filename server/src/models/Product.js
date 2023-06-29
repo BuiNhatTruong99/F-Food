@@ -22,11 +22,11 @@ var producSchema = new mongoose.Schema(
     },
     thumb: {
       type: String,
-      required: true,
+      default:
+        "https://res.cloudinary.com/dgepjghio/image/upload/v1688019896/FAST_FOOD/rajonpcozuxnshdpcqib.jpg",
     },
     images: {
       type: Array,
-      required: true,
     },
     quantity: {
       type: Number,

@@ -24,12 +24,6 @@ router.put(
   productController.uploadProductImage
 );
 
-// router.put(
-//   "/uploadimage/:pid",
-//   [verifyAccessToken, isAdmin],
-//   uploadCloud.array("prod-image", 10),
-//   productController.uploadProductImage
-// );
 router.delete(
   "/:pid",
   [verifyAccessToken, isAdmin],
