@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import style from './MenuContent.module.scss';
 import ProductItem from '../ProductItem';
 import { useDispatch } from 'react-redux';
-import { setInputSearchValue } from '~/redux/appSlice';
+import { setFeaturedValue, setInputSearchValue } from '~/redux/appSlice';
 import { useDebounce } from '~/hooks';
 
 const cx = classNames.bind(style);
@@ -22,11 +22,11 @@ const dataTypes = [
     },
     {
         value: 'Rate: Low to High',
-        sort: 'rate_lth',
+        sort: 'totalRating',
     },
     {
         value: 'Rate: High to Low',
-        sort: 'rate_htl',
+        sort: '-totalRating',
     },
 ];
 function MenuContent() {
@@ -52,8 +52,9 @@ function MenuContent() {
         inputRef.current.focus();
     };
 
-    const handlePriceFeatured = (e) => {
-        setPriceFeatured(e.target.innerText);
+    const handlePriceFeatured = (item) => {
+        setPriceFeatured(item.value);
+        dispatch(setFeaturedValue(item.sort));
     };
 
     useEffect(() => {
@@ -118,7 +119,11 @@ function MenuContent() {
                         }
                     >
                         {dataTypes.map((item, index) => (
-                            <li key={index} className={cx('menu-handle__featured-item')} onClick={handlePriceFeatured}>
+                            <li
+                                key={index}
+                                className={cx('menu-handle__featured-item')}
+                                onClick={() => handlePriceFeatured(item)}
+                            >
                                 {item.value}
                             </li>
                         ))}

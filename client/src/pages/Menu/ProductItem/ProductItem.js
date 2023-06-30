@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { apiGetProducts } from '~/apis/products';
-import { StartIcon } from '~/components/Icons';
+import { IconComment, StartIcon } from '~/components/Icons';
 import { FaCartArrowDown, FaRegHeart } from 'react-icons/fa';
 import style from './ProductItem.module.scss';
 import { useSelector } from 'react-redux';
@@ -14,38 +14,42 @@ function ProductItem() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const { selectCategories, selectedPrice, searchValue, selectedRate } = useSelector((state) => state.app);
+    const { selectCategories, selectedPrice, searchValue, selectedRate, featuredValue } = useSelector(
+        (state) => state.app,
+    );
 
     const fetchProducts = async () => {
         let categoryParams = selectCategories ? { category: selectCategories } : {};
         let priceParams = selectedPrice ? { price: selectedPrice } : {};
         let searchParams = searchValue ? { name: encodeURIComponent(searchValue) } : {};
         let rateParams = selectedRate ? { totalRating: selectedRate } : {};
+        let featuredParams = featuredValue ? { sort: featuredValue } : { sort: '-totalRating' };
 
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
         const response = await apiGetProducts({
-            sort: '-totalRating',
+            ...featuredParams,
             ...categoryParams,
             ...priceParams,
             ...searchParams,
             ...rateParams,
         });
+
         if (response?.products) {
             const updatedProducts = response.products.map((product) => ({
                 ...product,
                 favouritePro: product.totalRating >= 4,
+                numComments: product.ratings.length,
             }));
             setProducts(updatedProducts);
         }
-
         setIsLoading(false);
     };
 
     useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectCategories, selectedPrice, searchValue, selectedRate]);
+    }, [selectCategories, selectedPrice, searchValue, selectedRate, featuredValue]);
     return (
         <Fragment>
             {isLoading ? (
@@ -84,10 +88,16 @@ function ProductItem() {
                                     <span className={cx('product__item-info-text-desc')}>{product.description}</span>
                                 </div>
                                 <div className={cx('product__item-info-num')}>
-                                    <span className={cx('product__item-info-num-rating')}>
-                                        <StartIcon />
-                                        {product.totalRating}
-                                    </span>
+                                    <div className={cx('product_item-info-interact')}>
+                                        <span className={cx('product__item-info-num-rating')}>
+                                            <StartIcon />
+                                            {product.totalRating}
+                                        </span>
+                                        <span className={cx('product__item-info-num-comments')}>
+                                            <IconComment />
+                                            {product.numComments}
+                                        </span>
+                                    </div>
                                     <span className={cx('product__item-info-num-price')}>
                                         <strong>$</strong>
                                         {product.price}

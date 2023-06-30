@@ -1,8 +1,8 @@
 const images = {
     logo: require('~/assets/images/logo.png'),
-    analysis1: require('~/assets/images/analysis-thumb.jpg'),
-    analysis2: require('~/assets/images/analysis-thumb2.jpg'),
-    analysis3: require('~/assets/images/analysis-thumb3.jpg'),
+    analysis1: require('~/assets/images/analysis-thumb.png'),
+    analysis2: require('~/assets/images/analysis-thumb2.png'),
+    analysis3: require('~/assets/images/analysis-thumb3.png'),
     banner: require('~/assets/images/banner.jpg'),
     dessert: require('~/assets/images/dessert.png'),
     entree: require('~/assets/images/entree.png'),

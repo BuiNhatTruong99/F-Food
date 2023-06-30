@@ -123,3 +123,23 @@ export const ArrowDown = React.forwardRef(({ width = '2.3rem', height = '2.3rem'
         <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
     </svg>
 ));
+
+export const IconComment = React.forwardRef(({ width = '2rem', height = '2rem', className }, ref) => (
+    <svg
+        ref={ref}
+        className={className}
+        width={width}
+        height={height}
+        focusable="false"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+    >
+        <title>Bình luận</title>
+        <path
+            d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
+            fill="none"
+            stroke="currentColor"
+            strokeLinejoin="round"
+        ></path>
+    </svg>
+));

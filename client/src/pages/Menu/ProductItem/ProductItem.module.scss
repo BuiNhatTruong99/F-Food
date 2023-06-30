@@ -125,6 +125,9 @@
     display: flex;
     justify-content: space-between;
 }
+.product_item-info-interact {
+    display: flex;
+}
 
 .product__item-info-num-rating {
     display: flex;
@@ -133,7 +136,18 @@
     color: var(--primary);
 
     svg {
-        margin-right: 5px;
+        margin-right: 2px;
+    }
+}
+
+.product__item-info-num-comments {
+    display: flex;
+    align-items: center;
+    color: var(--primary);
+    margin-left: 10px;
+
+    svg {
+        margin-right: 2px;
     }
 }
 

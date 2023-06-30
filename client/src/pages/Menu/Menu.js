@@ -13,10 +13,10 @@ import CheckBox from '~/components/CheckBox';
 
 const cx = classNames.bind(style);
 const priceOptions = [
-    { content: 'Above $100', range: { gt: 100 } },
-    { content: '$50 to $99', range: { gte: 50, lte: 99 } },
-    { content: '$20 to $49', range: { gte: 20, lte: 49 } },
-    { content: 'Under $20', range: { lt: 20 } },
+    { content: 'Above $50', range: { gt: 50 } },
+    { content: '$30 to $49', range: { gte: 30, lte: 49 } },
+    { content: '$10 to $29', range: { gte: 10, lte: 29 } },
+    { content: 'Under $10', range: { lt: 10 } },
 ];
 
 const starFilters = [
