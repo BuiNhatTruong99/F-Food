@@ -1,0 +1,53 @@
+.login-form {
+    margin-bottom: 15px;
+}
+
+.login-form__commit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .check-password {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-login__commit-msg {
+        margin-left: 5px;
+        font-size: 1.3rem;
+        cursor: pointer;
+    }
+
+    .forgot-password {
+        font-size: 1.3rem;
+        cursor: pointer;
+        font-style: italic;
+    }
+
+    span {
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            color: var(--orange-color);
+        }
+    }
+}
+
+.login-form__submit {
+    display: flex;
+    justify-content: center;
+
+    .login-form__submit-btn {
+        min-width: 9.5rem;
+        height: 40px;
+        border-radius: 9999px;
+        color: var(--white);
+        background-color: var(--orange-color);
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            background-color: #c33d3b;
+        }
+    }
+}

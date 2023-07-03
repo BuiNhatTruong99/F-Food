@@ -7,6 +7,7 @@ import style from './ProductItem.module.scss';
 import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import { CircularProgress } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(style);
 
@@ -59,7 +60,11 @@ function ProductItem() {
             ) : (
                 <div className={cx('menu-products-layout')}>
                     {products.map((product, index) => (
-                        <div key={product._id} className={cx('menu-products-layout__item')}>
+                        <Link
+                            to={`${product.category}/${product.slug}`}
+                            key={product._id}
+                            className={cx('menu-products-layout__item')}
+                        >
                             <span
                                 className={
                                     product.favouritePro ? cx('menu-prodcuts-new', 'new-tag') : cx('menu-prodcuts-new')
@@ -104,7 +109,7 @@ function ProductItem() {
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             )}

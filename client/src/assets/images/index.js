@@ -8,6 +8,7 @@ const images = {
     entree: require('~/assets/images/entree.png'),
     appetizer: require('~/assets/images/appetizer.png'),
     drink: require('~/assets/images/drink.png'),
+    googleIcon: require('~/assets/images/google-icon.png'),
 };
 
 export default images;

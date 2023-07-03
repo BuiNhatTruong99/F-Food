@@ -22,7 +22,7 @@ const cx = classNames.bind(style);
 
 function Header() {
     const [sticky, setSticky] = useState(false);
-    const currentUser = true;
+    const currentUser = false;
 
     const handleScroll = () => {
         if (window.scrollY > 100) {
@@ -97,9 +97,9 @@ function Header() {
                                 <FontAwesomeIcon icon={faShoppingCart} />
                                 <div className={cx('navbar__cart_qty')}>0</div>
                             </div>
-                            <div className={cx('navbar__login')}>
+                            <Link to={'/Login'} className={cx('navbar__login')}>
                                 <button>Login</button>
-                            </div>
+                            </Link>
                         </Fragment>
                     )}{' '}
                 </div>

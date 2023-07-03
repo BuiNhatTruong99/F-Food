@@ -1,0 +1,31 @@
+.register-form {
+    margin-bottom: 15px;
+}
+
+.name-user__input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .form-field {
+        margin: 0 5px;
+    }
+}
+
+.register-form__submit {
+    display: flex;
+    justify-content: center;
+
+    .register-form__submit-btn {
+        min-width: 9.5rem;
+        height: 40px;
+        border-radius: 9999px;
+        color: var(--white);
+        background-color: var(--orange-color);
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            background-color: #c33d3b;
+        }
+    }
+}
