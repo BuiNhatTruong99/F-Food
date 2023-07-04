@@ -6,6 +6,8 @@ import * as yup from 'yup';
 
 import style from './LoginForm.module.scss';
 import LoginFormField from '../FormField/FormField';
+import { useCallback } from 'react';
+import { useState } from 'react';
 const cx = classNames.bind(style);
 
 const schema = yup.object().shape({
@@ -34,6 +36,15 @@ function LoginForm() {
         });
     };
 
+    const [payload, setPayload] = useState({
+        email: '',
+        password: '',
+    });
+
+    const handleLogin = useCallback(() => {
+        console.log(payload);
+    }, [payload]);
+
     return (
         <form onSubmit={handleSubmit(onHandleSubmit)} className={cx('login-form')}>
             <LoginFormField
@@ -41,6 +52,8 @@ function LoginForm() {
                 name="email"
                 label="Email address"
                 placeholder="Your email"
+                vale={payload.email}
+                setValue={setPayload}
                 register={register}
                 errors={errors}
             />
@@ -49,6 +62,8 @@ function LoginForm() {
                 name="password"
                 label="Password"
                 placeholder="Your password"
+                vale={payload.password}
+                setValue={setPayload}
                 register={register}
                 errors={errors}
             />
@@ -62,7 +77,7 @@ function LoginForm() {
                 <span className={cx('forgot-password')}>Forgot your accounts?</span>
             </div>
             <div className={cx('login-form__submit')}>
-                <button type="submit" className={cx('login-form__submit-btn')}>
+                <button type="submit" className={cx('login-form__submit-btn')} onClick={handleLogin}>
                     Login
                 </button>
             </div>

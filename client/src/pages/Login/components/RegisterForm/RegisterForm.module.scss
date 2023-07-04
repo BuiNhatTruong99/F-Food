@@ -29,3 +29,13 @@
         }
     }
 }
+
+.register-form__backhome {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.3rem;
+
+    .back-btn {
+        color: var(--orange-color) !important;
+    }
+}
