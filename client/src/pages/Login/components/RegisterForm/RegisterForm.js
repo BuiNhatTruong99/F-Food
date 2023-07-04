@@ -8,7 +8,7 @@ import { useCallback } from 'react';
 import style from './RegisterForm.module.scss';
 import LoginFormField from '../FormField/FormField';
 import { EmailIcon, FirstName, LastName, PasswordIcon } from '~/components/Icons';
-import { apiRegister } from '~/apis/user';
+import { apiRegister, apiLogin } from '~/apis/user';
 
 const schema = yup.object().shape({
     firstname: yup
@@ -18,7 +18,7 @@ const schema = yup.object().shape({
     lastname: yup
         .string()
         .required('This field is required')
-        .matches(/^[A-Za-z]+$/, 'Last name must be letter'),
+        .matches(/^[A-Za-z ]+$/, 'Last name must be letter'),
     email: yup
         .string()
         .required('This field is required')
@@ -58,8 +58,12 @@ function RegisterForm() {
     const handleRegister = useCallback(async () => {
         if (isValid) {
             const response = await apiRegister(payload);
-            console.log(response);
+            if (response.success) {
+                const loginResponse = await apiLogin(payload);
+                console.log(loginResponse);
+            }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isValid, payload]);
 
     return (

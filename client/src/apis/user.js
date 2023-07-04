@@ -6,3 +6,10 @@ export const apiRegister = (data) =>
         url: '/user/register',
         data,
     });
+
+export const apiLogin = (data) =>
+    axios({
+        method: 'POST',
+        url: '/user/login',
+        data,
+    });
