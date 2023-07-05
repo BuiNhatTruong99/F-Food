@@ -17,12 +17,15 @@ import {
 import images from '~/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useState } from 'react';
+import { useContext } from 'react';
+import AuthContext from '~/contexts/AuthContext';
 
 const cx = classNames.bind(style);
 
 function Header() {
-    const [sticky, setSticky] = useState(false);
-    const currentUser = false;
+    const auth = useContext(AuthContext);
+    const currentUser = auth.loggedIn; // Get the logged-in status from the AuthContext
+    const [sticky, setSticky] = useState(false); // State to track whether the header should be sticky or not
 
     const handleScroll = () => {
         if (window.scrollY > 100) {
@@ -31,7 +34,7 @@ function Header() {
             setSticky(false);
         }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll); // Add a scroll event listener to the window
 
     return (
         <header className={sticky ? cx('wrapper', 'sticky') : cx('wrapper')}>

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import LoginFormField from '../FormField/FormField';
 import { EmailIcon, PasswordIcon } from '~/components/Icons';
@@ -10,6 +11,11 @@ import { apiLogin } from '~/apis/user';
 import style from './LoginForm.module.scss';
 import Toast from '~/components/Toast';
 import { ToastContainer } from 'react-toastify';
+import { registerReducer } from '~/redux/user/userSlice';
+import { useDispatch } from 'react-redux';
+import path from '~/config';
+import { useContext } from 'react';
+import AuthContext from '~/contexts/AuthContext';
 
 const cx = classNames.bind(style);
 
@@ -19,6 +25,11 @@ const schema = yup.object().shape({
 });
 
 function LoginForm() {
+    const auth = useContext(AuthContext); // Get the AuthContext
+    const setSateLoggedIn = auth.setLoggedIn; // setSateLoggedIn is get the setLoggedIn from the AuthContext
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -41,12 +52,26 @@ function LoginForm() {
         if (isValid) {
             const response = await apiLogin(payload);
             if (response) {
-                Toast({ type: 'success', message: 'Login success' });
+                dispatch(
+                    registerReducer({
+                        isLoggedIn: true,
+                        accessToken: response.accessToken,
+                        userData: response.userData,
+                    }),
+                );
+
+                setSateLoggedIn(true); // Set the logged-in status to true in the AuthContext
+
+                Toast({ message: 'Login success 👌' });
+                setTimeout(() => {
+                    navigate(path.routes.HOME); // Navigate to the HOME route after a delay
+                }, 2000);
             } else {
-                Toast({ type: 'error', message: 'Login fail!' });
+                Toast({ type: 'warning', message: 'Login fail!' });
             }
         }
-    }, [payload, isValid]);
+    }, [payload, isValid, dispatch, navigate, setSateLoggedIn]);
+
     return (
         <>
             <ToastContainer />

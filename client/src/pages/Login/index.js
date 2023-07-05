@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import { Button, Container } from '@material-ui/core';
 import LoginForm from '~/pages/Login/components/LoginForm';
 import style from './style.module.scss';
-import loginThumb from '~/assets/images/login-thumb.png';
 import { FaceBookIcon } from '~/components/Icons';
 import images from '~/assets/images';
 import RegisterForm from './components/RegisterForm';
@@ -21,9 +20,7 @@ function Login() {
         <section className={cx('login-layout')}>
             <Container>
                 <div className={cx('login-container')}>
-                    <div className={cx('login-thumb')}>
-                        <img src={loginThumb} alt="" />
-                    </div>
+                    <div className={cx('login-thumb')}>{/* <img src={loginThumb} alt="" /> */}</div>
                     {!register ? (
                         <div className={cx('login-content')}>
                             <h2>JOIN WITH US</h2>

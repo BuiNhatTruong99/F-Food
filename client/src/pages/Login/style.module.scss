@@ -1,3 +1,5 @@
+$login-banner: url('../../assets/images/login-thumb.png');
+
 .login-container {
     display: flex;
     justify-content: space-between;
@@ -10,6 +12,8 @@
 .login-thumb {
     height: 100%;
     width: 55%;
+    background-image: $login-banner;
+    background-size: cover;
 
     img {
         display: block;
