@@ -1,11 +1,11 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Toast({ type, message }) {
+function Toast({ type, message, promise }) {
     if (type === undefined) {
         // If type is a promise
-        const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 1000));
-        return toast.promise(resolveAfter3Sec, {
+        // const resolveAfterSec = new Promise((resolve) => setTimeout(resolve, 1500));
+        return toast.promise(promise, {
             pending: 'Promise is pending',
             success: `${message}`,
             error: 'Promise rejected 🤯',

@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import GlobalStyles from '~/components/GlobalStyles';
 import { PersistGate } from 'redux-persist/integration/react';
 import { AuthProvider } from '~/contexts/AuthContext';
+import { LoginLayoutProvider } from './contexts/LoginLayoutContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -17,7 +18,9 @@ root.render(
             <PersistGate loading={null} persistor={persistor}>
                 <GlobalStyles>
                     <AuthProvider>
-                        <App />
+                        <LoginLayoutProvider>
+                            <App />
+                        </LoginLayoutProvider>
                     </AuthProvider>
                 </GlobalStyles>
             </PersistGate>

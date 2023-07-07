@@ -62,7 +62,7 @@ function LoginForm() {
 
                 setSateLoggedIn(true); // Set the logged-in status to true in the AuthContext
 
-                Toast({ message: 'Login success 👌' });
+                Toast({ type: 'success', message: 'Login success 👌' });
                 setTimeout(() => {
                     navigate(path.routes.HOME); // Navigate to the HOME route after a delay
                 }, 2000);
@@ -103,7 +103,7 @@ function LoginForm() {
                             <span>Save your password</span>
                         </label>
                     </div>
-                    <span className={cx('forgot-password')}>Forgot your accounts?</span>
+                    <span className={cx('forgot-password')}>Forgot your password?</span>
                 </div>
                 <div className={cx('login-form__submit')}>
                     <button type="submit" className={cx('login-form__submit-btn')} onClick={handleLogin}>

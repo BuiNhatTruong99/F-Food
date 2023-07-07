@@ -8,7 +8,9 @@ import { useCallback } from 'react';
 import style from './RegisterForm.module.scss';
 import LoginFormField from '../FormField/FormField';
 import { EmailIcon, FirstName, LastName, PasswordIcon } from '~/components/Icons';
-import { apiRegister, apiLogin } from '~/apis/user';
+import { apiRegister } from '~/apis/user';
+import VerifyForm from '../VerifyForm';
+import { ToastContainer, toast } from 'react-toastify';
 
 const schema = yup.object().shape({
     firstname: yup
@@ -32,6 +34,8 @@ const schema = yup.object().shape({
 const cx = classNames.bind(style);
 
 function RegisterForm() {
+    const [verifyForm, setVerifyForm] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -57,75 +61,95 @@ function RegisterForm() {
 
     const handleRegister = useCallback(async () => {
         if (isValid) {
-            const response = await apiRegister(payload);
-            if (response.success) {
-                const loginResponse = await apiLogin(payload);
-                console.log(loginResponse);
-            }
+            const id = toast.loading('Please wait...');
+            setTimeout(async () => {
+                const response = await apiRegister(payload);
+                if (response.success) {
+                    toast.update(id, {
+                        render: 'Register successfully',
+                        type: 'success',
+                        isLoading: false,
+                        autoClose: 1000,
+                    });
+                    setVerifyForm(true);
+                } else {
+                    toast.update(id, { render: response.message, type: 'error', isLoading: false, autoClose: 1000 });
+                }
+            }, 1500);
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isValid, payload]);
 
     return (
-        <form onSubmit={handleSubmit(onHandleSubmit)} className={cx('register-form')}>
-            <div className={cx('name-user__input')}>
-                <LoginFormField
-                    icon={<FirstName />}
-                    name="firstname"
-                    label="First name"
-                    placeholder="Your first name"
-                    register={register}
-                    errors={errors}
-                    value={payload.firstname}
-                    setValue={setPayload}
-                />
+        <>
+            <ToastContainer />
+            <form onSubmit={handleSubmit(onHandleSubmit)} className={cx('register-form')}>
+                {!verifyForm ? (
+                    <>
+                        <div className={cx('name-user__input')}>
+                            <LoginFormField
+                                icon={<FirstName />}
+                                name="firstname"
+                                label="First name"
+                                placeholder="Your first name"
+                                register={register}
+                                errors={errors}
+                                value={payload.firstname}
+                                setValue={setPayload}
+                            />
 
-                <LoginFormField
-                    icon={<LastName />}
-                    name="lastname"
-                    label="Last name"
-                    placeholder="Your last name"
-                    register={register}
-                    errors={errors}
-                    value={payload.lastname}
-                    setValue={setPayload}
-                />
-            </div>
+                            <LoginFormField
+                                icon={<LastName />}
+                                name="lastname"
+                                label="Last name"
+                                placeholder="Your last name"
+                                register={register}
+                                errors={errors}
+                                value={payload.lastname}
+                                setValue={setPayload}
+                            />
+                        </div>
 
-            <LoginFormField
-                icon={<EmailIcon />}
-                name="email"
-                label="Email address"
-                placeholder="Your email"
-                register={register}
-                errors={errors}
-                value={payload.email}
-                setValue={setPayload}
-            />
+                        <LoginFormField
+                            icon={<EmailIcon />}
+                            name="email"
+                            label="Email address"
+                            placeholder="Your email"
+                            register={register}
+                            errors={errors}
+                            value={payload.email}
+                            setValue={setPayload}
+                        />
 
-            <LoginFormField
-                icon={<PasswordIcon />}
-                name="password"
-                label="Password"
-                placeholder="Your password"
-                register={register}
-                errors={errors}
-                value={payload.password}
-                setValue={setPayload}
-            />
+                        <LoginFormField
+                            icon={<PasswordIcon />}
+                            name="password"
+                            label="Password"
+                            placeholder="Your password"
+                            register={register}
+                            errors={errors}
+                            value={payload.password}
+                            setValue={setPayload}
+                        />
 
-            <div className={cx('register-form__submit')}>
-                <button type="submit" className={cx('register-form__submit-btn')} onClick={handleRegister}>
-                    Register
-                </button>
-            </div>
+                        <div className={cx('register-form__submit')}>
+                            <button type="submit" className={cx('register-form__submit-btn')} onClick={handleRegister}>
+                                Register
+                            </button>
+                        </div>
 
-            <div className={cx('register-form__backhome')}>
-                <Link to="/" className={cx('back-btn')}>
-                    Back to home page
-                </Link>
-            </div>
-        </form>
+                        <div className={cx('register-form__backhome')}>
+                            <Link to="/" className={cx('back-btn')}>
+                                Back to home page
+                            </Link>
+                        </div>
+                    </>
+                ) : (
+                    <VerifyForm />
+                )}
+            </form>
+        </>
     );
 }
 

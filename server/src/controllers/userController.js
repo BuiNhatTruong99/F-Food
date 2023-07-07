@@ -7,27 +7,64 @@ const {
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const crypto = require("crypto");
+const makeToken = require("uniqid");
 
 class UserController {
   // POST : register
-  async register(req, res, next) {
-    const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      return res.status(500).json({
+  register = asyncHandler(async (req, res) => {
+    const { email, password, firstname, lastname } = req.body;
+    if (!email || !password || !firstname || !lastname) {
+      return res.status(400).json({
         success: false,
-        message: "Email already exists",
+        message: "Missing input",
       });
-    } else {
-      const newUser = User.create(req.body)
-        .then((user) => {
-          return res.status(200).json({
-            success: newUser ? true : false,
-            message: user ? "User created" : "Something went wrong",
-          });
-        })
-        .catch(next);
     }
-  }
+    // check email has been used or not
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(202).json({
+        success: false,
+        message: "Email has been used",
+        user,
+      });
+    }
+    const token = makeToken();
+    res.cookie(
+      "data_register",
+      { ...req.body, token },
+      {
+        httpOnly: true,
+        secure: true,
+        maxAge: 15 * 60 * 1000,
+      }
+    );
+
+    const html = `Your verification code is: ${token}.
+    This code will expire in 15 minutes from now`;
+    await sendMail({ email, html, subject: "Verify email - register FFood" });
+    return res.status(200).json({
+      success: true,
+      message: "Please check your email to verify your account",
+    });
+  });
+
+  verifyRegister = asyncHandler(async (req, res) => {
+    const cookie = req.cookies;
+    const { token } = req.params;
+    if (!cookie || cookie?.data_register?.token !== token)
+      throw new Error("Register fail");
+    const newUser = await User.create({
+      email: cookie?.data_register?.email,
+      password: cookie?.data_register?.password,
+      firstname: cookie?.data_register?.firstname,
+      lastname: cookie?.data_register?.lastname,
+    });
+    res.clearCookie("data_register");
+    return res.status(200).json({
+      success: newUser ? true : false,
+      message: newUser ? "Register success" : "Oops! Your code is invalid",
+    });
+  });
 
   /**
    * Login =>
@@ -176,7 +213,7 @@ class UserController {
 
   // Post : forgot password
   async forgotPassword(req, res) {
-    const { email } = req.query;
+    const { email } = req.body;
     if (!email) {
       return res.status(400).json({
         success: false,
@@ -199,6 +236,7 @@ class UserController {
       const data = {
         email,
         html,
+        subject: "Forgot password",
       };
       // send mail
       const rs = await sendMail(data);
