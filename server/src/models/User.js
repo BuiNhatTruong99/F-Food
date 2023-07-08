@@ -13,6 +13,11 @@ var userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dgepjghio/image/upload/v1688823143/FAST_FOOD/i9z0avb93ozgfxsasywl.jpg",
+    },
     email: {
       type: String,
       required: true,

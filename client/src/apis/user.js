@@ -22,3 +22,16 @@ export const apiVerify = (token) =>
         token,
         withCredentials: true,
     });
+
+export const apiForgotPass = (data) =>
+    axios({
+        method: 'POST',
+        url: '/user/forgotpassword',
+        data,
+    });
+export const apiResetPass = (data) =>
+    axios({
+        method: 'PUT',
+        url: '/user/resetpassword',
+        data,
+    });

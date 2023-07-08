@@ -8,13 +8,12 @@ import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 import { analysis } from './analysis';
 import style from './Home.module.scss';
 import { Container } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(style);
 
 function Home() {
-    const { isLoggedIn, current } = useSelector((state) => state.user);
-    console.log({ isLoggedIn, current });
+    // const { isLoggedIn, current } = useSelector((state) => state.user);
     const settings = {
         dots: true,
         lazyLoad: true,

@@ -1,0 +1,45 @@
+.forgot-pass-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 45%;
+    padding: 60px 50px;
+}
+
+.forgot-pass__desc,
+.forgot-pass__back {
+    font-size: 1.3rem;
+    color: var(--orange-color);
+    font-style: italic;
+}
+
+.forgot-pass__back {
+    display: flex;
+    justify-content: flex-end;
+
+    .forgot-pass__back-btn {
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.forgot-pass__send {
+    display: flex;
+    justify-content: center;
+
+    .forgot-pass__send-btn {
+        min-width: 9.5rem;
+        height: 40px;
+        border-radius: 9999px;
+        color: var(--white);
+        background-color: var(--orange-color);
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            background-color: #c33d3b;
+        }
+    }
+}

@@ -11,11 +11,12 @@ import { apiLogin } from '~/apis/user';
 import style from './LoginForm.module.scss';
 import Toast from '~/components/Toast';
 import { ToastContainer } from 'react-toastify';
-import { registerReducer } from '~/redux/user/userSlice';
+import { userReducer } from '~/redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import path from '~/config';
 import { useContext } from 'react';
 import AuthContext from '~/contexts/AuthContext';
+import LoginLayoutContext from '~/contexts/LoginLayoutContext';
 
 const cx = classNames.bind(style);
 
@@ -27,6 +28,7 @@ const schema = yup.object().shape({
 function LoginForm() {
     const auth = useContext(AuthContext); // Get the AuthContext
     const setSateLoggedIn = auth.setLoggedIn; // setSateLoggedIn is get the setLoggedIn from the AuthContext
+    const layout = useContext(LoginLayoutContext);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -51,9 +53,10 @@ function LoginForm() {
     const handleLogin = useCallback(async () => {
         if (isValid) {
             const response = await apiLogin(payload);
-            if (response) {
+            console.log(response);
+            if (response.success) {
                 dispatch(
-                    registerReducer({
+                    userReducer({
                         isLoggedIn: true,
                         accessToken: response.accessToken,
                         userData: response.userData,
@@ -103,7 +106,9 @@ function LoginForm() {
                             <span>Save your password</span>
                         </label>
                     </div>
-                    <span className={cx('forgot-password')}>Forgot your password?</span>
+                    <div className={cx('forgot-password')} onClick={() => layout.setForgotPass(!layout.forgotPass)}>
+                        Forgot your password?
+                    </div>
                 </div>
                 <div className={cx('login-form__submit')}>
                     <button type="submit" className={cx('login-form__submit-btn')} onClick={handleLogin}>

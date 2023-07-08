@@ -3,6 +3,7 @@ const router = express.Router();
 const { verifyAccessToken, isAdmin } = require("../middlewares/verifyToken");
 
 const userController = require("../controllers/userController");
+const uploadCloud = require("../config/cloudinary.config");
 
 router.post("/register", userController.register);
 router.get("/verifyregister/:token", userController.verifyRegister);
@@ -21,6 +22,12 @@ router.put(
   "/:_id",
   [verifyAccessToken, isAdmin],
   userController.updateUserByAdmin
+);
+router.put(
+  "/uploadavatar/:uid",
+  verifyAccessToken,
+  uploadCloud.single("user-avatar"),
+  userController.updateUserAvatar
 );
 
 module.exports = router;

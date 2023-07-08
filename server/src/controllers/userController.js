@@ -223,16 +223,16 @@ class UserController {
     try {
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({
+        return res.status(202).json({
           success: false,
-          message: "Email not found",
+          message: "This email does not exist",
         });
       }
       const resetToken = user.createPasswordChangeToken(); // create token
       await user.save();
       // create mail content
       const html = `Please click on the link below to change your password. This link will expire in 10 minutes from now
-            . <a href="${process.env.URL_SERVER}/api/user/reset-password/${resetToken}">Click here</a>`;
+            . <a href="${process.env.CLIENT_URL}/reset-password/${resetToken}">Click here</a>`;
       const data = {
         email,
         html,
@@ -242,7 +242,9 @@ class UserController {
       const rs = await sendMail(data);
       return res.status(200).json({
         success: true,
-        rs,
+        message: rs
+          ? "Success! Please check your email"
+          : "Something went wrong",
       });
     } catch (error) {
       return res.status(500).json({
@@ -253,49 +255,30 @@ class UserController {
   }
 
   // Put : reset password
-  async resetPassword(req, res, next) {
-    // get token from body
+  resetPassword = asyncHandler(async (req, res) => {
     const { token, password } = req.body;
-    if (!token || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Missing token or password",
-      });
-    }
-    try {
-      // hash token
-      const passwordResetToken = crypto
-        .createHash("sha256")
-        .update(token)
-        .digest("hex");
-      // check token in database
-      const user = await User.findOne({
-        passwordResetToken,
-        passwordResetExpires: { $gt: Date.now() },
-      });
-      if (!user) {
-        return res.status(400).json({
-          success: false,
-          message: "Token invalid or expired",
-        });
-      }
-      // update password
-      user.password = password;
-      user.passwordResetToken = undefined; // set token to undefined
-      user.passwordResetExpires = undefined; // set token expire time to undefined
-      user.passwordChangeAt = Date.now(); // set password change time
-      await user.save();
-      return res.status(200).json({
-        success: true,
-        message: user ? "Password changed" : "Something went wrong",
-      });
-    } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  }
+    if (!token || !password) throw new Error("Missing token or password");
+
+    const passwordResetToken = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+    const user = await User.findOne({
+      passwordResetToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) throw new Error("Token invalid or expired");
+    user.password = password;
+    user.passwordResetToken = undefined; // set token to undefined
+    user.passwordResetExpires = undefined; // set token expire time to undefined
+    user.passwordChangeAt = Date.now(); // set password change time
+    await user.save();
+    return res.status(200).json({
+      success: user ? true : false,
+      message: user ? "Password changed" : "Something went wrong",
+    });
+  });
 
   // GET : get all user
   async getAllUser(req, res) {
@@ -426,6 +409,22 @@ class UserController {
         updateUser: response ? response : "Something went wrong",
       });
     }
+  });
+
+  // PUT : update avatar
+  updateUserAvatar = asyncHandler(async (req, res) => {
+    const { uid } = req.params;
+    if (!req.file) throw new Error("No image sent");
+
+    const updateUser = await User.findByIdAndUpdate(
+      uid,
+      { avatar: req.file.path },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: updateUser ? true : false,
+      data: updateUser ? updateUser : "Something went wrong",
+    });
   });
 }
 

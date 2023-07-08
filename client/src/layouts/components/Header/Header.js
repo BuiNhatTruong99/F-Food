@@ -24,8 +24,10 @@ const cx = classNames.bind(style);
 
 function Header() {
     const auth = useContext(AuthContext);
-    const currentUser = auth.loggedIn; // Get the logged-in status from the AuthContext
+    const loginStatus = auth.loggedIn; // Get the logged-in status from the AuthContext
     const [sticky, setSticky] = useState(false); // State to track whether the header should be sticky or not
+    const { firstname, lastname, avatar } = auth.current || {}; // Get the current user from the AuthContext
+    console.log(auth.current);
 
     const handleScroll = () => {
         if (window.scrollY > 100) {
@@ -63,7 +65,7 @@ function Header() {
                 </div>
 
                 <div className={cx('navbar__right')}>
-                    {currentUser ? (
+                    {loginStatus ? (
                         <Fragment>
                             <Tippy content="Your cart" placement="bottom">
                                 <div className={cx('navbar__cart')}>
@@ -73,12 +75,12 @@ function Header() {
                             </Tippy>
 
                             <div className={cx('navbar__login')}>
-                                <img
-                                    className={cx('navbar__avatar')}
-                                    src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/42a81079b5885e152707b170d63ba2df~c5_100x100.jpeg?x-expires=1687320000&x-signature=URbj%2FpO4%2FKgYzqD2%2BxDCTcpHXSI%3D"
-                                    alt="avatar"
-                                />
-                                <div className={cx('navbar__username')}>Last Name</div>
+                                <div className={cx('navbar__avatar')}>
+                                    <img className={cx('navbar__avatar-img')} src={avatar} alt="avatar" />
+                                </div>
+                                <div className={cx('navbar__username')}>
+                                    {firstname} {lastname}
+                                </div>
                                 <ul className={cx('navbar__right-options')}>
                                     <li className={cx('navbar__right-item')}>
                                         <FontAwesomeIcon icon={faUser} /> My account

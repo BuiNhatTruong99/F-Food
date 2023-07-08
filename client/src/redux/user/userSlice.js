@@ -9,7 +9,7 @@ export const userSlice = createSlice({
     },
 
     reducers: {
-        registerReducer: (state, action) => {
+        userReducer: (state, action) => {
             state.isLoggedIn = action.payload.isLoggedIn;
             state.current = action.payload.userData;
             state.accessToken = action.payload.accessToken;
@@ -18,6 +18,6 @@ export const userSlice = createSlice({
 });
 
 // eslint-disable-next-line no-empty-pattern
-export const { registerReducer } = userSlice.actions;
+export const { userReducer } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -8,6 +8,7 @@ import images from '~/assets/images';
 import RegisterForm from './components/RegisterForm';
 import { useContext } from 'react';
 import LoginLayoutContext from '~/contexts/LoginLayoutContext';
+import ForgotPassForm from './components/ForgotPassForm/ForgotPassForm';
 
 const cx = classNames.bind(style);
 
@@ -15,7 +16,8 @@ function Login() {
     const layout = useContext(LoginLayoutContext);
     const loginLayout = layout.loginLayout;
     const loading = layout.loading;
-    console.log(loginLayout);
+    const forgotPass = layout.forgotPass;
+
     const handleLayout = () => {
         layout.setLoginLayout(!loginLayout);
     };
@@ -31,41 +33,47 @@ function Login() {
                     ) : (
                         <>
                             <div className={cx('login-thumb')}>{/* <img src={loginThumb} alt="" /> */}</div>
-                            {loginLayout ? (
-                                <div className={cx('login-content')}>
-                                    <h2>JOIN WITH US</h2>
-                                    <div className={cx('login-msg')}>
-                                        <span>Don't have an account?</span>
-                                        <span className={cx('login-msg-btn')} onClick={handleLayout}>
-                                            <strong>Create an account</strong>
-                                        </span>
-                                    </div>
-                                    <LoginForm />
-                                    <div className={cx('login__separate')}>
-                                        <span className={cx('login__separate-text')}>OR</span>
-                                    </div>
-                                    <div className={cx('login__options')}>
-                                        <Button variant="contained" className={cx('login__option-gg')}>
-                                            <img src={images.googleIcon} alt="" />
-                                            Login with Google
-                                        </Button>
-                                        <Button variant="contained" className={cx('login__option-fb')}>
-                                            <FaceBookIcon />
-                                            Login with FaceBook
-                                        </Button>
-                                    </div>
-                                </div>
+                            {forgotPass ? (
+                                <ForgotPassForm />
                             ) : (
-                                <div className={cx('login-content')}>
-                                    <h2>WELCOME TO FFOOD</h2>
-                                    <div className={cx('login-msg')}>
-                                        <span>Already have an account?</span>
-                                        <span className={cx('login-msg-btn')} onClick={handleLayout}>
-                                            <strong>Go to login here</strong>
-                                        </span>
-                                    </div>
-                                    <RegisterForm />
-                                </div>
+                                <>
+                                    {loginLayout ? (
+                                        <div className={cx('login-content')}>
+                                            <h2>JOIN WITH US</h2>
+                                            <div className={cx('login-msg')}>
+                                                <span>Don't have an account?</span>
+                                                <span className={cx('login-msg-btn')} onClick={handleLayout}>
+                                                    <strong>Create an account</strong>
+                                                </span>
+                                            </div>
+                                            <LoginForm />
+                                            <div className={cx('login__separate')}>
+                                                <span className={cx('login__separate-text')}>OR</span>
+                                            </div>
+                                            <div className={cx('login__options')}>
+                                                <Button variant="contained" className={cx('login__option-gg')}>
+                                                    <img src={images.googleIcon} alt="" />
+                                                    Login with Google
+                                                </Button>
+                                                <Button variant="contained" className={cx('login__option-fb')}>
+                                                    <FaceBookIcon />
+                                                    Login with FaceBook
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className={cx('login-content')}>
+                                            <h2>WELCOME TO FFOOD</h2>
+                                            <div className={cx('login-msg')}>
+                                                <span>Already have an account?</span>
+                                                <span className={cx('login-msg-btn')} onClick={handleLayout}>
+                                                    <strong>Go to login here</strong>
+                                                </span>
+                                            </div>
+                                            <RegisterForm />
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </>
                     )}

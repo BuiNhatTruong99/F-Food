@@ -1,0 +1,12 @@
+.primary__submit-btn {
+    min-width: 9.5rem;
+    height: 40px;
+    border-radius: 9999px;
+    color: var(--white);
+    background-color: var(--orange-color);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: #c33d3b;
+    }
+}
