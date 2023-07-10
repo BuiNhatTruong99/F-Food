@@ -5,7 +5,7 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import userSlice from './user/userSlice';
 
 const persistConfig = {
-    key: 'root',
+    key: 'FFood',
     storage,
 };
 

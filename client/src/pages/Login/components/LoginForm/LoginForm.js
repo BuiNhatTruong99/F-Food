@@ -53,7 +53,6 @@ function LoginForm() {
     const handleLogin = useCallback(async () => {
         if (isValid) {
             const response = await apiLogin(payload);
-            console.log(response);
             if (response.success) {
                 dispatch(
                     userReducer({

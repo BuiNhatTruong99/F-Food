@@ -7,7 +7,13 @@ const instance = axios.create({
 instance.interceptors.request.use(
     function (config) {
         // Do something before request is sent
-        return config;
+        let dataLocalStorage = window.localStorage.getItem('persist:FFood');
+        if (dataLocalStorage) {
+            dataLocalStorage = JSON.parse(dataLocalStorage);
+            const token = JSON.parse(dataLocalStorage?.accessToken);
+            config.headers = { authorization: `Bearer ${token}` };
+            return config;
+        } else return config;
     },
     function (error) {
         // Do something with request error

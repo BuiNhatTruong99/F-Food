@@ -1,47 +1,5 @@
-$menu-image: url('../../assets/images/menu-banner.png');
-
 .menu {
     margin-bottom: 80px;
-}
-
-.banner {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 32rem;
-    margin-bottom: 80px;
-    background-image: $menu-image;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50%;
-
-    .banner__title {
-        font-size: 3.6rem;
-        font-weight: bold;
-        text-align: center;
-        color: var(--white);
-    }
-}
-
-.banner__paths {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 5px;
-
-    .banner__slogan {
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin: 5px;
-        padding: 7px;
-        text-transform: capitalize;
-        color: var(--white);
-        font-style: italic;
-    }
-    svg {
-        color: var(--white);
-    }
 }
 
 .menu__layout {

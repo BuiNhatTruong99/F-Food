@@ -19,15 +19,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useState } from 'react';
 import { useContext } from 'react';
 import AuthContext from '~/contexts/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getCurrentUser } from '~/redux/user/asyncUserActions';
+import { logout } from '~/redux/user/userSlice';
 
 const cx = classNames.bind(style);
 
 function Header() {
+    const dispatch = useDispatch();
     const auth = useContext(AuthContext);
     const loginStatus = auth.loggedIn; // Get the logged-in status from the AuthContext
     const [sticky, setSticky] = useState(false); // State to track whether the header should be sticky or not
-    const { firstname, lastname, avatar } = auth.current || {}; // Get the current user from the AuthContext
-    console.log(auth.current);
+    const { current } = useSelector((state) => state.user); // Get the current user from the redux store
+    const { firstname, lastname, avatar } = current || {}; // Destructure the current user object
+
+    useEffect(() => {
+        if (loginStatus) {
+            dispatch(getCurrentUser()); // If the user is logged in, dispatch the getCurrentUser action to get the current user
+        } else {
+            dispatch(logout()); // Dispatch the logout action to clear the current user from the redux store
+        }
+    }, [dispatch, loginStatus]); // Run this effect when the current user changes
 
     const handleScroll = () => {
         if (window.scrollY > 100) {
@@ -37,6 +50,12 @@ function Header() {
         }
     };
     window.addEventListener('scroll', handleScroll); // Add a scroll event listener to the window
+
+    const handleLogout = () => {
+        //clear local storage
+        auth.setLoggedIn(!loginStatus); // Set the logged-in status to false
+        localStorage.removeItem('persist:FFood');
+    };
 
     return (
         <header className={sticky ? cx('wrapper', 'sticky') : cx('wrapper')}>
@@ -89,7 +108,7 @@ function Header() {
                                         <FontAwesomeIcon icon={faTags} />
                                         My wishlist
                                     </li>
-                                    <li className={cx('navbar__right-item')}>
+                                    <li className={cx('navbar__right-item')} onClick={handleLogout}>
                                         <FontAwesomeIcon icon={faRightToBracket} />
                                         Log out
                                     </li>

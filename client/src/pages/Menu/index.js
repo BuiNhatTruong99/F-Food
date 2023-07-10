@@ -10,6 +10,7 @@ import { Container } from 'react-bootstrap';
 import MenuContent from './MenuContent/MenuContent';
 import { setSelectedCategory, setSelectedPrice, setSelectedRate } from '~/redux/appSlice';
 import CheckBox from '~/components/CheckBox';
+import MenuBanner from '~/components/MenuBanner/MenuBanner';
 
 const cx = classNames.bind(style);
 const priceOptions = [
@@ -38,14 +39,7 @@ function Menu() {
 
     return (
         <section className={cx('menu')}>
-            <section className={cx('banner')}>
-                <h1 className={cx('banner__title')}>Menu</h1>
-                <div className={cx('banner__paths')}>
-                    <span className={cx('banner__slogan')}>
-                        "Where Food is Art, Every Dish a Masterpiece of Flavors"
-                    </span>
-                </div>
-            </section>
+            <MenuBanner />
             <Container className={cx('menu__layout')}>
                 <div className={cx('menu__container')}>
                     <div className={cx('menu-filters')}>
