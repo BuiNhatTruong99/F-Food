@@ -48,7 +48,7 @@ function Menu() {
                             {categories?.map((prodCategory) => (
                                 <NavLink
                                     key={prodCategory._id}
-                                    // to={prodCategory.name}
+                                    // to={`/menu/${prodCategory.name}`}
                                     className={
                                         activeCategory === prodCategory._id
                                             ? cx('menu-filters__item', 'selected')

@@ -61,7 +61,7 @@ function ProductItem() {
                 <div className={cx('menu-products-layout')}>
                     {products.map((product, index) => (
                         <Link
-                            to={`${product.category}/${product.slug}`}
+                            to={`${product.category}/${product.slug}/${product._id}`}
                             key={product._id}
                             className={cx('menu-products-layout__item')}
                         >
