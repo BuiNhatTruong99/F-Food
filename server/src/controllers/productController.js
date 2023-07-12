@@ -18,7 +18,10 @@ class ProductController {
   getProduct = asyncHandler(async (req, res) => {
     // get id product from params
     const { pid } = req.params;
-    const product = await Product.findById(pid);
+    const product = await Product.findById(pid).populate({
+      path: "ratings",
+      populate: { path: "postedBy", select: "firstname lastname avatar" },
+    });
     res.status(200).json({
       status: product ? true : false,
       data: product ? product : "Cannot find product",
@@ -116,7 +119,7 @@ class ProductController {
    */
   ratingProduct = asyncHandler(async (req, res) => {
     const { _id } = req.payload; // get user id from token
-    const { star, comment, pid } = req.body;
+    const { star, comment, pid, updatedAt } = req.body;
     if (!star || !pid) throw new Error("Missing data");
     // find product to rating
     const ratingProduct = await Product.findById(pid);
@@ -132,7 +135,11 @@ class ProductController {
         },
         {
           // set new star and comment
-          $set: { "ratings.$.star": star, "ratings.$.comment": comment },
+          $set: {
+            "ratings.$.star": star,
+            "ratings.$.comment": comment,
+            "ratings.$.updatedAt": updatedAt,
+          },
         },
         { new: true }
       );
@@ -142,7 +149,7 @@ class ProductController {
         pid,
         {
           // push rating to ratings array
-          $push: { ratings: { star, comment, postedBy: _id } },
+          $push: { ratings: { star, comment, postedBy: _id, updatedAt } },
         },
         { new: true }
       );

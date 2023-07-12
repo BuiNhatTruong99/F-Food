@@ -8,12 +8,14 @@ import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import Pagination from '~/components/Pagination/Pagination';
 
 const cx = classNames.bind(style);
 
 function ProductItem() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [counts, setCounts] = useState(0);
 
     const { selectCategories, selectedPrice, searchValue, selectedRate, featuredValue } = useSelector(
         (state) => state.app,
@@ -43,6 +45,7 @@ function ProductItem() {
                 numComments: product.ratings.length,
             }));
             setProducts(updatedProducts);
+            setCounts(response.counts);
         }
         setIsLoading(false);
     };
@@ -58,60 +61,67 @@ function ProductItem() {
                     <CircularProgress thickness={5} style={{ color: '#ff514e' }} />
                 </div>
             ) : (
-                <div className={cx('menu-products-layout')}>
-                    {products.map((product, index) => (
-                        <Link
-                            to={`${product.category}/${product.slug}/${product._id}`}
-                            key={product._id}
-                            className={cx('menu-products-layout__item')}
-                        >
-                            <span
-                                className={
-                                    product.favouritePro ? cx('menu-prodcuts-new', 'new-tag') : cx('menu-prodcuts-new')
-                                }
+                <>
+                    <div className={cx('menu-products-layout')}>
+                        {products.map((product, index) => (
+                            <Link
+                                to={`${product.category}/${product.slug}/${product._id}`}
+                                key={product._id}
+                                className={cx('menu-products-layout__item')}
                             >
-                                Favourite
-                            </span>
-                            <div className={cx('menu-prodcuts-layout__hover-icon')}>
-                                <button className={cx('menu-prodcuts__addcart-btn')}>
-                                    <FaCartArrowDown />
-                                </button>
-                                <button className={cx('menu-prodcuts__like-btn')}>
-                                    <FaRegHeart />
-                                </button>
-                            </div>
-                            <div className={cx('menu-products-layout__item-img-layout')}>
-                                <img
-                                    src={product.thumb}
-                                    alt={product.thumb}
-                                    className={cx('menu-products-layout__item-img')}
-                                />
-                            </div>
-                            <div className={cx('menu-products-layout__item-info')}>
-                                <div className={cx('product__item-info-text')}>
-                                    <span className={cx('product__item-info-text-name')}>{product.name}</span>
-                                    <span className={cx('product__item-info-text-desc')}>{product.description}</span>
+                                <span
+                                    className={
+                                        product.favouritePro
+                                            ? cx('menu-prodcuts-new', 'new-tag')
+                                            : cx('menu-prodcuts-new')
+                                    }
+                                >
+                                    Favourite
+                                </span>
+                                <div className={cx('menu-prodcuts-layout__hover-icon')}>
+                                    <button className={cx('menu-prodcuts__addcart-btn')}>
+                                        <FaCartArrowDown />
+                                    </button>
+                                    <button className={cx('menu-prodcuts__like-btn')}>
+                                        <FaRegHeart />
+                                    </button>
                                 </div>
-                                <div className={cx('product__item-info-num')}>
-                                    <div className={cx('product_item-info-interact')}>
-                                        <span className={cx('product__item-info-num-rating')}>
-                                            <StartIcon />
-                                            {product.totalRating}
-                                        </span>
-                                        <span className={cx('product__item-info-num-comments')}>
-                                            <IconComment />
-                                            {product.numComments}
+                                <div className={cx('menu-products-layout__item-img-layout')}>
+                                    <img
+                                        src={product.thumb}
+                                        alt={product.thumb}
+                                        className={cx('menu-products-layout__item-img')}
+                                    />
+                                </div>
+                                <div className={cx('menu-products-layout__item-info')}>
+                                    <div className={cx('product__item-info-text')}>
+                                        <span className={cx('product__item-info-text-name')}>{product.name}</span>
+                                        <span className={cx('product__item-info-text-desc')}>
+                                            {product.description}
                                         </span>
                                     </div>
-                                    <span className={cx('product__item-info-num-price')}>
-                                        <strong>$</strong>
-                                        {product.price}
-                                    </span>
+                                    <div className={cx('product__item-info-num')}>
+                                        <div className={cx('product_item-info-interact')}>
+                                            <span className={cx('product__item-info-num-rating')}>
+                                                <StartIcon />
+                                                {product.totalRating}
+                                            </span>
+                                            <span className={cx('product__item-info-num-comments')}>
+                                                <IconComment />
+                                                {product.numComments}
+                                            </span>
+                                        </div>
+                                        <span className={cx('product__item-info-num-price')}>
+                                            <strong>$</strong>
+                                            {product.price}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
+                            </Link>
+                        ))}
+                    </div>
+                    <Pagination totalCount={counts} />
+                </>
             )}
         </Fragment>
     );

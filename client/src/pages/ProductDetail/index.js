@@ -1,17 +1,22 @@
 import ReactImageMagnify from 'react-image-magnify';
-import MenuBanner from '~/components/MenuBanner/MenuBanner';
-import { Container, Grid } from '@material-ui/core';
-import { StartBorderIcon, StartIcon } from '~/components/Icons';
-import PrimaryButton from '~/components/PrimaryButton/PrimaryButton';
-import { FaCalendar, FaRegHeart, FaTag, FaTruckMoving } from 'react-icons/fa';
-import Breadcrumbs from '~/components/Breadcrumb/Breadcrumb';
-import { useParams } from 'react-router-dom';
-import { useCallback, useState } from 'react';
-import { apiProduct } from '~/apis/products';
+import Swal from 'sweetalert2';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Container, Grid } from '@material-ui/core';
+import { FaCalendar, FaRegHeart, FaStarHalfAlt, FaTag, FaTruckMoving } from 'react-icons/fa';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback, useState } from 'react';
+import { StartBorderIcon, StartIcon } from '~/components/Icons';
+import PrimaryButton from '~/components/PrimaryButton/PrimaryButton';
+import Breadcrumbs from '~/components/Breadcrumb/Breadcrumb';
+import { apiProduct, apiRating } from '~/apis/products';
 import classNames from 'classnames/bind';
+import MenuBanner from '~/components/MenuBanner/MenuBanner';
 import style from './ProductDetail.module.scss';
+import StartComment from './StarComment/StarComments';
+import path from '~/config/route';
+import images from '~/assets/images';
+import moment from 'moment/moment';
 
 const cx = classNames.bind(style);
 
@@ -19,10 +24,15 @@ function ProductDetail() {
     const { pid, name, cate } = useParams();
     const [product, setProduct] = useState(null);
     const [thumbnail, setThumbnail] = useState(null);
-    const { current } = useSelector((state) => state.user);
-    const { avatar } = current || {};
+    const { current, isLoggedIn } = useSelector((state) => state.user);
+    const { avatar } = current || { avatar: images.anonymous_avatar };
     const [quantity, setQuantity] = useState(1);
+    const [rating, setRating] = useState(null);
+    const [comment, setComment] = useState('');
+    let borderStar = Math.floor(5 - product?.totalRating) || 0;
+    let halfStar = Math.ceil(5 - (product?.totalRating + borderStar)) || 0;
 
+    const navigate = useNavigate();
     const fetchProductData = async () => {
         const response = await apiProduct(pid);
         if (response.status) {
@@ -40,8 +50,30 @@ function ProductDetail() {
         setThumbnail(e.target.src);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!isLoggedIn) {
+            Swal.fire({
+                text: 'Please login to continue',
+                cancelButtonText: 'Cancel',
+                confirmButtonAriaLabel: 'Login',
+                showCancelButton: true,
+                title: 'You are not logged in!',
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+            });
+        } else {
+            if (!rating || !comment || !pid) {
+                console.log('Please fill in all fields');
+                return;
+            }
+            const response = await apiRating({ star: rating, comment, pid, updatedAt: Date.now() });
+            if (response.status) {
+                setRating(null);
+                setComment('');
+                fetchProductData();
+            }
+        }
     };
 
     const handleQuantity = useCallback(
@@ -120,10 +152,13 @@ function ProductDetail() {
                                 {Array.from({ length: product?.totalRating || 0 }).map((_, index) => (
                                     <StartIcon key={index} />
                                 ))}
-                                {Array.from({ length: 5 - product?.totalRating || 0 }).map((_, index) => (
+                                {Array.from({ length: halfStar }).map((_, index) => (
+                                    <FaStarHalfAlt key={index} />
+                                ))}
+                                {Array.from({ length: borderStar }).map((_, index) => (
                                     <StartBorderIcon key={index} />
                                 ))}
-                                <span>({product?.ratings.length || 0} ) Customer Reviews</span>
+                                <span>({product?.ratings.length || 0}) Customer Reviews</span>
                             </div>
                             <div className={cx('product-detail__info__price')}>$ {product?.price}</div>
                             <div className={cx('product-detail__info__category')}>
@@ -182,40 +217,44 @@ function ProductDetail() {
                             <h2 className={cx('product-detail__comments__title')}>
                                 Customer Reviews <span>({product?.ratings?.length})</span>{' '}
                             </h2>
-                            <div className={cx('product-detail__comments__tag')}>
-                                <div className={cx('comments__tag-avt')}>
-                                    <img
-                                        src="https://res.cloudinary.com/dgepjghio/image/upload/v1688823143/FAST_FOOD/i9z0avb93ozgfxsasywl.jpg"
-                                        alt="avatar"
-                                    />
-                                </div>
-                                <div className={cx('comments__tag_content')}>
-                                    <div className={cx('comments__tag_content-info')}>
-                                        <span className={cx('info-name')}>Truong Bui</span>
-                                        <span className={cx('info-time')}>17 hours ago</span>
+
+                            {product?.ratings?.map((item, index) => (
+                                <div className={cx('product-detail__comments__tag')} key={index}>
+                                    <div className={cx('comments__tag-avt')}>
+                                        <img src={item.postedBy.avatar} alt="avatar" />
                                     </div>
-                                    <div className={cx('info-feedback')}>
-                                        <StartIcon />
-                                        <StartIcon />
+                                    <div className={cx('comments__tag_content')}>
+                                        <div className={cx('comments__tag_content-info')}>
+                                            <span className={cx('info-name')}>
+                                                {item.postedBy.firstname} {item.postedBy.lastname}
+                                            </span>
+                                            <span className={cx('info-time')}>{moment(item.updatedAt)?.fromNow()}</span>
+                                        </div>
+                                        <div className={cx('info-feedback')}>
+                                            {Array.from({ length: item.star }).map((_, index) => (
+                                                <StartIcon key={index} />
+                                            ))}
+                                        </div>
+                                        <div className={cx('info-comment')}>{item.comment}</div>
                                     </div>
-                                    <div className={cx('info-comment')}>Goodddd</div>
                                 </div>
-                            </div>
+                            ))}
+
                             <form onSubmit={handleSubmit} className={cx('product-detail__comments-current-user')}>
                                 <div className={cx('comments-current-user__tag-avt')}>
                                     <img src={avatar} alt="avatar" />
                                 </div>
                                 <div className={cx('comments-current-user__tag_content')}>
                                     <div className={cx('info_current-user-feedback')}>
-                                        <StartIcon />
-                                        <StartIcon />
-                                        <StartIcon />
-                                        <StartIcon />
-                                        <StartIcon />
+                                        <StartComment rating={rating} setRating={setRating} />
                                         <span>(Please choose an one)</span>
                                     </div>
                                     <div className={cx('info_current-user-comment')}>
-                                        <textarea placeholder="Type your comment here..." />
+                                        <textarea
+                                            placeholder="Type your comment here..."
+                                            value={comment}
+                                            onChange={(e) => setComment(e.target.value)}
+                                        />
                                     </div>
                                     <PrimaryButton value={'Post comment'} />
                                 </div>

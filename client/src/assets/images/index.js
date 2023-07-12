@@ -9,6 +9,7 @@ const images = {
     appetizer: require('~/assets/images/appetizer.png'),
     drink: require('~/assets/images/drink.png'),
     googleIcon: require('~/assets/images/google-icon.png'),
+    anonymous_avatar: require('~/assets/images/user-warning.png'),
 };
 
 export default images;

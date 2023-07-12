@@ -43,6 +43,9 @@ var producSchema = new mongoose.Schema(
         star: { type: Number },
         postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         comment: { type: String },
+        updatedAt: {
+          type: Date,
+        },
       },
     ],
     totalRating: {
