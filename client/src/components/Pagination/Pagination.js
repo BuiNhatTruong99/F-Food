@@ -8,7 +8,6 @@ const cx = classNames.bind(style);
 
 function Pagination({ totalCount }) {
     const pagination = usePagination(totalCount, 2);
-    console.log(pagination);
     return (
         <div className={cx('pagination')}>
             {pagination?.map((item) => (

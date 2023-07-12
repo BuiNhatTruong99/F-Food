@@ -8,6 +8,7 @@ import GlobalStyles from '~/components/GlobalStyles';
 import { PersistGate } from 'redux-persist/integration/react';
 import { AuthProvider } from '~/contexts/AuthContext';
 import { LoginLayoutProvider } from './contexts/LoginLayoutContext';
+import { PaginationProvider } from './contexts/PaginationContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -19,7 +20,9 @@ root.render(
                 <GlobalStyles>
                     <AuthProvider>
                         <LoginLayoutProvider>
-                            <App />
+                            <PaginationProvider>
+                                <App />
+                            </PaginationProvider>
                         </LoginLayoutProvider>
                     </AuthProvider>
                 </GlobalStyles>

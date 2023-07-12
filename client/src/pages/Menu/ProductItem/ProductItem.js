@@ -3,12 +3,14 @@ import classNames from 'classnames/bind';
 import { apiGetProducts } from '~/apis/products';
 import { IconComment, StartIcon } from '~/components/Icons';
 import { FaCartArrowDown, FaRegHeart } from 'react-icons/fa';
-import style from './ProductItem.module.scss';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Pagination from '~/components/Pagination/Pagination';
+import PaginationContext from '~/contexts/PaginationContext';
+import style from './ProductItem.module.scss';
 
 const cx = classNames.bind(style);
 
@@ -16,6 +18,7 @@ function ProductItem() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [counts, setCounts] = useState(0);
+    const pagination = useContext(PaginationContext);
 
     const { selectCategories, selectedPrice, searchValue, selectedRate, featuredValue } = useSelector(
         (state) => state.app,
@@ -27,7 +30,9 @@ function ProductItem() {
         let searchParams = searchValue ? { name: encodeURIComponent(searchValue) } : {};
         let rateParams = selectedRate ? { totalRating: selectedRate } : {};
         let featuredParams = featuredValue ? { sort: featuredValue } : { sort: '-totalRating' };
+        let pageParams = pagination.page ? { page: pagination.page } : { page: 1 };
 
+        window.scrollTo(0, 0);
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
         const response = await apiGetProducts({
@@ -36,6 +41,7 @@ function ProductItem() {
             ...priceParams,
             ...searchParams,
             ...rateParams,
+            ...pageParams,
         });
 
         if (response?.products) {
@@ -53,7 +59,7 @@ function ProductItem() {
     useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectCategories, selectedPrice, searchValue, selectedRate, featuredValue]);
+    }, [selectCategories, selectedPrice, searchValue, selectedRate, featuredValue, pagination.page]);
     return (
         <Fragment>
             {isLoading ? (
