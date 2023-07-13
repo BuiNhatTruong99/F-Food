@@ -17,10 +17,17 @@ import StartComment from './StarComment/StarComments';
 import path from '~/config/route';
 import images from '~/assets/images';
 import moment from 'moment/moment';
+import { apiAddToCart } from '~/apis/user';
+import Toast from '~/components/Toast';
+import { ToastContainer } from 'react-toastify';
+import { useContext } from 'react';
+import CartContext from '~/contexts/CartContext';
 
 const cx = classNames.bind(style);
 
 function ProductDetail() {
+    const navigate = useNavigate();
+    const { setFlag } = useContext(CartContext);
     const { pid, name, cate } = useParams();
     const [product, setProduct] = useState(null);
     const [thumbnail, setThumbnail] = useState(null);
@@ -32,7 +39,6 @@ function ProductDetail() {
     let borderStar = Math.floor(5 - product?.totalRating) || 0;
     let halfStar = Math.ceil(5 - (product?.totalRating + borderStar)) || 0;
 
-    const navigate = useNavigate();
     const fetchProductData = async () => {
         const response = await apiProduct(pid);
         if (response.status) {
@@ -64,7 +70,6 @@ function ProductDetail() {
             });
         } else {
             if (!rating || !comment || !pid) {
-                console.log('Please fill in all fields');
                 return;
             }
             const response = await apiRating({ star: rating, comment, pid, updatedAt: Date.now() });
@@ -96,8 +101,35 @@ function ProductDetail() {
         [quantity],
     );
 
+    const handleAddToCart = async () => {
+        if (!current) {
+            Swal.fire({
+                text: 'Please login to continue',
+                cancelButtonText: 'Cancel',
+                confirmButtonAriaLabel: 'Login',
+                showCancelButton: true,
+                title: 'You are not logged in!',
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+            });
+        } else {
+            const response = await apiAddToCart({ pid, quantity });
+            if (response.success) {
+                if (response.updateUser.cart) {
+                    setFlag(true);
+                    Toast({ type: 'success', message: 'The product has been added to cart 👌' });
+                } else {
+                    Toast({ type: 'info', message: 'This product is already in your cart 🦄' });
+                }
+            } else {
+                Toast({ type: 'error', message: 'Something went wrong 😥' });
+            }
+        }
+    };
+
     return (
         <section className={cx('product-detail')}>
+            <ToastContainer />
             <MenuBanner />
             <Container>
                 <Grid container spacing={4}>
@@ -188,7 +220,7 @@ function ProductDetail() {
                                     </button>
                                 </div>
                                 <div className={cx('actions__add-cart')}>
-                                    <PrimaryButton value={'ADD TO CART'} />
+                                    <PrimaryButton value={'ADD TO CART'} onClick={handleAddToCart} />
                                 </div>
                                 <div className={cx('actions__like')}>
                                     <button className={cx('like__button')}>

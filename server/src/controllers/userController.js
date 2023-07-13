@@ -125,6 +125,10 @@ class UserController {
   getCurrent(req, res, next) {
     const { _id } = req.payload;
     User.findById(_id)
+      .populate({
+        path: "cart",
+        populate: { path: "product", select: "name price thumb" },
+      }) // populate cart.product
       .select("-password -refreshToken -role") // select all field except password, refreshToken, role
       .then((user) => {
         return res.status(200).json({
@@ -403,7 +407,12 @@ class UserController {
         _id,
         { $push: { cart: { product: pid, quantity } } },
         { new: true }
-      ).select("-password -refreshToken -role");
+      )
+        .populate({
+          path: "cart",
+          populate: { path: "product", select: "name price thumb" },
+        })
+        .select("-password -refreshToken -role");
       return res.status(200).json({
         success: response ? true : false,
         updateUser: response ? response : "Something went wrong",

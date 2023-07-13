@@ -41,3 +41,10 @@ export const apiCurrentUser = () =>
         method: 'GET',
         url: '/user/current',
     });
+
+export const apiAddToCart = (data) =>
+    axios({
+        method: 'PUT',
+        url: '/user/cart',
+        data,
+    });

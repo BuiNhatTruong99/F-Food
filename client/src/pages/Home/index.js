@@ -16,10 +16,11 @@ function Home() {
     // const { isLoggedIn, current } = useSelector((state) => state.user);
     const settings = {
         dots: true,
+        arrows: false,
         lazyLoad: true,
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 6000,
         infinite: true,
         accessibility: false,

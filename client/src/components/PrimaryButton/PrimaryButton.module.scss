@@ -1,4 +1,7 @@
 .primary__submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 9.5rem;
     height: 40px;
     padding: 0 10px;
@@ -6,6 +9,10 @@
     color: var(--white);
     background-color: var(--orange-color);
     transition: all 0.2s ease-in-out;
+
+    svg {
+        margin-right: 5px;
+    }
 
     &:hover {
         background-color: #c33d3b;

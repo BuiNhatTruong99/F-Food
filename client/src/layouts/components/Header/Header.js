@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import style from './Header.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import {
@@ -8,12 +8,12 @@ import {
     faHome,
     faNewspaper,
     faRightToBracket,
-    faShoppingCart,
     faStore,
     faTags,
     faUser,
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
 import images from '~/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useState } from 'react';
@@ -23,16 +23,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getCurrentUser } from '~/redux/user/asyncUserActions';
 import { logout } from '~/redux/user/userSlice';
+import Cart from '~/components/Cart/Cart';
+import path from '~/config/route';
+import CartContext from '~/contexts/CartContext';
 
 const cx = classNames.bind(style);
 
 function Header() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const auth = useContext(AuthContext);
     const loginStatus = auth.loggedIn; // Get the logged-in status from the AuthContext
     const [sticky, setSticky] = useState(false); // State to track whether the header should be sticky or not
     const { current } = useSelector((state) => state.user); // Get the current user from the redux store
     const { firstname, lastname, avatar } = current || {}; // Destructure the current user object
+    const { setIsCartOpen, cart } = useContext(CartContext);
+    const numCartItems = current ? cart.length : 0; // Get the number of items in the cart
 
     useEffect(() => {
         if (loginStatus) {
@@ -57,78 +63,88 @@ function Header() {
         localStorage.removeItem('persist:FFood');
     };
 
-    return (
-        <header className={sticky ? cx('wrapper', 'sticky') : cx('wrapper')}>
-            <div className={cx('inner')}>
-                <Link className={cx('logo')} to="/">
-                    <img src={images.logo} alt="FFood" />
-                </Link>
-                <div className={cx('navbar__left')}>
-                    <ul className={cx('navbar__list')}>
-                        <Link className={cx('navbar__item')} to="/">
-                            <FontAwesomeIcon icon={faHome} /> Home
-                        </Link>
-                        <Link className={cx('navbar__item')} to="/menu">
-                            <FontAwesomeIcon icon={faUtensils} />
-                            Menu
-                        </Link>
-                        <Link className={cx('navbar__item')} to="/news">
-                            <FontAwesomeIcon icon={faNewspaper} />
-                            News
-                        </Link>
-                        <Link className={cx('navbar__item')} to="/store-system">
-                            <FontAwesomeIcon icon={faStore} />
-                            Store locations
-                        </Link>
-                    </ul>
-                </div>
+    const toggleCart = () => {
+        current && setIsCartOpen(true);
+        !current &&
+            Swal.fire({
+                text: 'Please login to continue',
+                cancelButtonText: 'Cancel',
+                confirmButtonAriaLabel: 'Login',
+                showCancelButton: true,
+                title: 'You are not logged in!',
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+            });
+    };
 
-                <div className={cx('navbar__right')}>
-                    {loginStatus ? (
+    return (
+        <>
+            <header className={sticky ? cx('wrapper', 'sticky') : cx('wrapper')}>
+                <div className={cx('inner')}>
+                    <Link className={cx('logo')} to="/">
+                        <img src={images.logo} alt="FFood" />
+                    </Link>
+                    <div className={cx('navbar__left')}>
+                        <ul className={cx('navbar__list')}>
+                            <Link className={cx('navbar__item')} to="/">
+                                <FontAwesomeIcon icon={faHome} /> Home
+                            </Link>
+                            <Link className={cx('navbar__item')} to="/menu">
+                                <FontAwesomeIcon icon={faUtensils} />
+                                Menu
+                            </Link>
+                            <Link className={cx('navbar__item')} to="/news">
+                                <FontAwesomeIcon icon={faNewspaper} />
+                                News
+                            </Link>
+                            <Link className={cx('navbar__item')} to="/store-system">
+                                <FontAwesomeIcon icon={faStore} />
+                                Store locations
+                            </Link>
+                        </ul>
+                    </div>
+
+                    <div className={cx('navbar__right')}>
                         <Fragment>
                             <Tippy content="Your cart" placement="bottom">
-                                <div className={cx('navbar__cart')}>
+                                <div className={cx('navbar__cart')} onClick={toggleCart}>
                                     <FontAwesomeIcon icon={faCartShopping} />
-                                    <div className={cx('navbar__cart_qty')}>0</div>
+                                    <div className={cx('navbar__cart_qty')}>{numCartItems}</div>
                                 </div>
                             </Tippy>
-
-                            <div className={cx('navbar__login')}>
-                                <div className={cx('navbar__avatar')}>
-                                    <img className={cx('navbar__avatar-img')} src={avatar} alt="avatar" />
+                            {loginStatus && current ? (
+                                <div className={cx('navbar__login')}>
+                                    <div className={cx('navbar__avatar')}>
+                                        <img className={cx('navbar__avatar-img')} src={avatar} alt="avatar" />
+                                    </div>
+                                    <div className={cx('navbar__username')}>
+                                        {firstname} {lastname}
+                                    </div>
+                                    <ul className={cx('navbar__right-options')}>
+                                        <li className={cx('navbar__right-item')}>
+                                            <FontAwesomeIcon icon={faUser} /> My account
+                                        </li>
+                                        <li className={cx('navbar__right-item')}>
+                                            <FontAwesomeIcon icon={faTags} />
+                                            My wishlist
+                                        </li>
+                                        <li className={cx('navbar__right-item')} onClick={handleLogout}>
+                                            <FontAwesomeIcon icon={faRightToBracket} />
+                                            Log out
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div className={cx('navbar__username')}>
-                                    {firstname} {lastname}
-                                </div>
-                                <ul className={cx('navbar__right-options')}>
-                                    <li className={cx('navbar__right-item')}>
-                                        <FontAwesomeIcon icon={faUser} /> My account
-                                    </li>
-                                    <li className={cx('navbar__right-item')}>
-                                        <FontAwesomeIcon icon={faTags} />
-                                        My wishlist
-                                    </li>
-                                    <li className={cx('navbar__right-item')} onClick={handleLogout}>
-                                        <FontAwesomeIcon icon={faRightToBracket} />
-                                        Log out
-                                    </li>
-                                </ul>
-                            </div>
+                            ) : (
+                                <Link to={'/Login'} className={cx('navbar__login')}>
+                                    <button>Login</button>
+                                </Link>
+                            )}{' '}
                         </Fragment>
-                    ) : (
-                        <Fragment>
-                            <div className={cx('navbar__cart')}>
-                                <FontAwesomeIcon icon={faShoppingCart} />
-                                <div className={cx('navbar__cart_qty')}>0</div>
-                            </div>
-                            <Link to={'/Login'} className={cx('navbar__login')}>
-                                <button>Login</button>
-                            </Link>
-                        </Fragment>
-                    )}{' '}
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+            <Cart />
+        </>
     );
 }
 

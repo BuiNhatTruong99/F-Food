@@ -9,6 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { AuthProvider } from '~/contexts/AuthContext';
 import { LoginLayoutProvider } from './contexts/LoginLayoutContext';
 import { PaginationProvider } from './contexts/PaginationContext';
+import { CartProvider } from './contexts/CartContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -20,9 +21,11 @@ root.render(
                 <GlobalStyles>
                     <AuthProvider>
                         <LoginLayoutProvider>
-                            <PaginationProvider>
-                                <App />
-                            </PaginationProvider>
+                            <CartProvider>
+                                <PaginationProvider>
+                                    <App />
+                                </PaginationProvider>
+                            </CartProvider>
                         </LoginLayoutProvider>
                     </AuthProvider>
                 </GlobalStyles>
