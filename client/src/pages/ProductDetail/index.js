@@ -17,11 +17,12 @@ import StartComment from './StarComment/StarComments';
 import path from '~/config/route';
 import images from '~/assets/images';
 import moment from 'moment/moment';
-import { apiAddToCart } from '~/apis/user';
+import { apiAddToCart, apiAddToWishList } from '~/apis/user';
 import Toast from '~/components/Toast';
 import { ToastContainer } from 'react-toastify';
 import { useContext } from 'react';
 import CartContext from '~/contexts/CartContext';
+import WishListContext from '~/contexts/WishListContext';
 
 const cx = classNames.bind(style);
 
@@ -36,6 +37,7 @@ function ProductDetail() {
     const [quantity, setQuantity] = useState(1);
     const [rating, setRating] = useState(null);
     const [comment, setComment] = useState('');
+    const { setFlagWl } = useContext(WishListContext);
     let borderStar = Math.floor(5 - product?.totalRating) || 0;
     let halfStar = Math.ceil(5 - (product?.totalRating + borderStar)) || 0;
 
@@ -117,10 +119,38 @@ function ProductDetail() {
             if (response.success) {
                 if (response.updateUser.cart) {
                     setFlag(true);
-                    Toast({ type: 'success', message: 'The product has been added to cart 👌' });
+                    Toast({ type: 'success', message: 'This product has been added to cart 👌' });
                 } else {
                     Toast({ type: 'info', message: 'This product is already in your cart 🦄' });
                 }
+            } else {
+                Toast({ type: 'error', message: 'Something went wrong 😥' });
+            }
+        }
+    };
+
+    const handleAddToWishList = async () => {
+        if (!current) {
+            Swal.fire({
+                text: 'Please login to continue',
+                cancelButtonText: 'Cancel',
+                confirmButtonAriaLabel: 'Login',
+                showCancelButton: true,
+                title: 'You are not logged in!',
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+            });
+        } else {
+            const response = await apiAddToWishList({ pid });
+            if (response.success) {
+                setFlagWl(true);
+                const { status } = response;
+                const toastData =
+                    status === 'add'
+                        ? { message: 'Added to the wish list 👌', type: 'success' }
+                        : { message: 'Removed from the wish list 🦄', type: 'info' };
+
+                Toast({ type: toastData.type, message: toastData.message });
             } else {
                 Toast({ type: 'error', message: 'Something went wrong 😥' });
             }
@@ -223,7 +253,7 @@ function ProductDetail() {
                                     <PrimaryButton value={'ADD TO CART'} onClick={handleAddToCart} />
                                 </div>
                                 <div className={cx('actions__like')}>
-                                    <button className={cx('like__button')}>
+                                    <button className={cx('like__button')} onClick={handleAddToWishList}>
                                         <FaRegHeart />
                                     </button>
                                 </div>

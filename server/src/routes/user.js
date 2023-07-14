@@ -23,6 +23,12 @@ router.put(
   verifyAccessToken,
   userController.removeItemFromCart
 );
+router.put("/wishlist", verifyAccessToken, userController.updateUserWishlist);
+router.put(
+  "/wishlist/remove",
+  verifyAccessToken,
+  userController.removeItemFromWishlist
+);
 router.put(
   "/:_id",
   [verifyAccessToken, isAdmin],

@@ -10,6 +10,7 @@ import { AuthProvider } from '~/contexts/AuthContext';
 import { LoginLayoutProvider } from './contexts/LoginLayoutContext';
 import { PaginationProvider } from './contexts/PaginationContext';
 import { CartProvider } from './contexts/CartContext';
+import { WishListProvider } from './contexts/WishListContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -22,9 +23,11 @@ root.render(
                     <AuthProvider>
                         <LoginLayoutProvider>
                             <CartProvider>
-                                <PaginationProvider>
-                                    <App />
-                                </PaginationProvider>
+                                <WishListProvider>
+                                    <PaginationProvider>
+                                        <App />
+                                    </PaginationProvider>
+                                </WishListProvider>
                             </CartProvider>
                         </LoginLayoutProvider>
                     </AuthProvider>

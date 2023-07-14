@@ -55,3 +55,17 @@ export const apiRemoveFromCart = (data) =>
         url: '/user/cart/remove',
         data,
     });
+
+export const apiAddToWishList = (data) =>
+    axios({
+        method: 'PUT',
+        url: '/user/wishlist',
+        data,
+    });
+
+export const apiRemoveFromWishList = (data) =>
+    axios({
+        method: 'PUT',
+        url: '/user/wishlist/remove',
+        data,
+    });

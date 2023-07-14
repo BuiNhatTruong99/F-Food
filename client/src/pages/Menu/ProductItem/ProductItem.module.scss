@@ -30,6 +30,7 @@
         .menu-products-layout__item-img {
             transform: scale(1.1);
         }
+
         .menu-prodcuts-layout__hover-icon {
             opacity: 1;
             visibility: visible;
@@ -86,6 +87,7 @@
 
 .menu-products-layout__item-img-layout {
     overflow: hidden;
+    transition: all 0.25s ease-in-out;
     // border-radius: var(--default-border-radius);
 }
 .menu-products-layout__item-img {

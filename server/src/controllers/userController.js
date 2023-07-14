@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const crypto = require("crypto");
 const makeToken = require("uniqid");
+const { log } = require("console");
 
 class UserController {
   // POST : register
@@ -129,6 +130,10 @@ class UserController {
         path: "cart",
         populate: { path: "product", select: "name price thumb" },
       }) // populate cart.product
+      .populate({
+        path: "wishlist",
+        select: "name price thumb description",
+      }) // populate wishlist
       .select("-password -refreshToken -role") // select all field except password, refreshToken, role
       .then((user) => {
         return res.status(200).json({
@@ -416,6 +421,84 @@ class UserController {
       return res.status(200).json({
         success: response ? true : false,
         updateUser: response ? response : "Something went wrong",
+      });
+    }
+  });
+
+  // PUT : update wishlist
+  updateUserWishlist = asyncHandler(async (req, res) => {
+    const { _id } = req.payload;
+    const { pid } = req.body;
+    if (!pid) throw new Error("Missing input");
+    const userWishlist = await User.findById(_id).select("wishlist");
+    const productInWishlist = await userWishlist.wishlist.find(
+      (item) => item.toString() === pid
+    );
+    if (productInWishlist) {
+      const response = await User.findByIdAndUpdate(
+        _id,
+        { $pull: { wishlist: pid } },
+        { safe: true, multi: false },
+        { new: true }
+      )
+        .populate({
+          path: "wishlist",
+          select: "name price thumb description",
+        })
+        .select("-password -refreshToken -role");
+      return res.status(200).json({
+        success: response ? true : false,
+        status: "remove",
+        updateUser: response ? response : "Something went wrong",
+      });
+    } else {
+      const response = await User.findByIdAndUpdate(
+        _id,
+        { $push: { wishlist: pid } },
+        { new: true }
+      )
+        .populate({
+          path: "wishlist",
+          select: "name price thumb description",
+        })
+        .select("-password -refreshToken -role");
+      return res.status(200).json({
+        success: response ? true : false,
+        status: "add",
+        updateUser: response ? response : "Something went wrong",
+      });
+    }
+  });
+
+  // PUT : remove item from wishlist
+  removeItemFromWishlist = asyncHandler(async (req, res) => {
+    const { _id } = req.payload;
+    const { pid } = req.body;
+    if (!pid) throw new Error("Missing input");
+    const userWishlist = await User.findById(_id).select("wishlist");
+    const productInWishlist = await userWishlist.wishlist.find(
+      (item) => item.toString() === pid
+    );
+    if (productInWishlist) {
+      const response = await User.findByIdAndUpdate(
+        _id,
+        { $pull: { wishlist: pid } },
+        { safe: true, multi: false },
+        { new: true }
+      )
+        .populate({
+          path: "wishlist",
+          select: "name price thumb description",
+        })
+        .select("-password -refreshToken -role");
+      return res.status(200).json({
+        success: response ? true : false,
+        updateUser: response ? response : "Something went wrong",
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in wishlist",
       });
     }
   });

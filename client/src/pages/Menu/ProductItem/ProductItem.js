@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
-import { apiGetProducts } from '~/apis/products';
-import { IconComment, StartIcon } from '~/components/Icons';
-import { FaCartArrowDown, FaRegHeart } from 'react-icons/fa';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import { CircularProgress } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { apiGetProducts } from '~/apis/products';
+import { FaCartArrowDown, FaRegHeart } from 'react-icons/fa';
+import { IconComment, StartIcon } from '~/components/Icons';
 import Pagination from '~/components/Pagination/Pagination';
 import PaginationContext from '~/contexts/PaginationContext';
 import style from './ProductItem.module.scss';
+import classNames from 'classnames/bind';
+import { apiAddToCart, apiAddToWishList } from '~/apis/user';
+import Toast from '~/components/Toast';
+import path from '~/config/route';
+import CartContext from '~/contexts/CartContext';
+import { ToastContainer } from 'react-toastify';
+import WishListContext from '~/contexts/WishListContext';
 
 const cx = classNames.bind(style);
 
 function ProductItem() {
+    const navigate = useNavigate();
+    const { current } = useSelector((state) => state.user);
+    const { setFlag } = useContext(CartContext);
+    const { setFlagWl } = useContext(WishListContext);
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [counts, setCounts] = useState(0);
@@ -60,8 +71,68 @@ function ProductItem() {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectCategories, selectedPrice, searchValue, selectedRate, featuredValue, pagination.page]);
+
+    const handleAddToCart = async (pid) => {
+        if (!current) {
+            Swal.fire({
+                text: 'Please login to continue',
+                cancelButtonText: 'Cancel',
+                confirmButtonAriaLabel: 'Login',
+                showCancelButton: true,
+                title: 'You are not logged in!',
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+            });
+        } else {
+            const response = await apiAddToCart({ pid, quantity: 1 });
+            if (response.success) {
+                if (response.updateUser.cart) {
+                    setFlag(true);
+                    Toast({ type: 'success', message: 'The product has been added to cart 👌' });
+                } else {
+                    Toast({ type: 'info', message: 'This product is already in your cart 🦄' });
+                }
+            } else {
+                Toast({ type: 'error', message: 'Something went wrong 😥' });
+            }
+        }
+    };
+
+    const handleDetail = (product) => {
+        navigate(`${product.category}/${product.slug}/${product._id}`);
+    };
+
+    const handleAddToWishList = async (pid) => {
+        if (!current) {
+            Swal.fire({
+                text: 'Please login to continue',
+                cancelButtonText: 'Cancel',
+                confirmButtonAriaLabel: 'Login',
+                showCancelButton: true,
+                title: 'You are not logged in!',
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+            });
+        } else {
+            const response = await apiAddToWishList({ pid });
+            if (response.success) {
+                setFlagWl(true);
+                const { status } = response;
+                const toastData =
+                    status === 'add'
+                        ? { message: 'Added to the wish list 👌', type: 'success' }
+                        : { message: 'Removed from the wish list 🦄', type: 'info' };
+
+                Toast({ type: toastData.type, message: toastData.message });
+            } else {
+                Toast({ type: 'error', message: 'Something went wrong 😥' });
+            }
+        }
+    };
+
     return (
         <Fragment>
+            <ToastContainer />
             {isLoading ? (
                 <div className={cx('spinner')}>
                     <CircularProgress thickness={5} style={{ color: '#ff514e' }} />
@@ -70,11 +141,7 @@ function ProductItem() {
                 <>
                     <div className={cx('menu-products-layout')}>
                         {products.map((product, index) => (
-                            <Link
-                                to={`${product.category}/${product.slug}/${product._id}`}
-                                key={product._id}
-                                className={cx('menu-products-layout__item')}
-                            >
+                            <div key={product._id} className={cx('menu-products-layout__item')}>
                                 <span
                                     className={
                                         product.favouritePro
@@ -85,21 +152,33 @@ function ProductItem() {
                                     Favourite
                                 </span>
                                 <div className={cx('menu-prodcuts-layout__hover-icon')}>
-                                    <button className={cx('menu-prodcuts__addcart-btn')}>
+                                    <button
+                                        className={cx('menu-prodcuts__addcart-btn')}
+                                        onClick={() => handleAddToCart(product._id)}
+                                    >
                                         <FaCartArrowDown />
                                     </button>
-                                    <button className={cx('menu-prodcuts__like-btn')}>
+                                    <button
+                                        className={cx('menu-prodcuts__like-btn')}
+                                        onClick={() => handleAddToWishList(product._id)}
+                                    >
                                         <FaRegHeart />
                                     </button>
                                 </div>
-                                <div className={cx('menu-products-layout__item-img-layout')}>
+                                <div
+                                    className={cx('menu-products-layout__item-img-layout')}
+                                    onClick={() => handleDetail(product)}
+                                >
                                     <img
                                         src={product.thumb}
                                         alt={product.thumb}
                                         className={cx('menu-products-layout__item-img')}
                                     />
                                 </div>
-                                <div className={cx('menu-products-layout__item-info')}>
+                                <div
+                                    className={cx('menu-products-layout__item-info')}
+                                    onClick={() => handleDetail(product)}
+                                >
                                     <div className={cx('product__item-info-text')}>
                                         <span className={cx('product__item-info-text-name')}>{product.name}</span>
                                         <span className={cx('product__item-info-text-desc')}>
@@ -123,7 +202,7 @@ function ProductItem() {
                                         </span>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                     <Pagination totalCount={counts} />

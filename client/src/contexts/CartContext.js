@@ -8,6 +8,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const { isLoggedIn } = useSelector((state) => state.user);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isWishListOpen, setIsWishListOpen] = useState(false);
     const [flag, setFlag] = useState(false); // flag to trigger useEffect
     const [cart, setCart] = useState([]); // number of items in cart [not used
     const fetchCartData = async () => {
@@ -28,7 +29,9 @@ export const CartProvider = ({ children }) => {
     }, [isCartOpen, flag]);
 
     return (
-        <CartContext.Provider value={{ cart, setCart, isCartOpen, setIsCartOpen, flag, setFlag }}>
+        <CartContext.Provider
+            value={{ cart, setCart, isCartOpen, setIsCartOpen, flag, setFlag, isWishListOpen, setIsWishListOpen }}
+        >
             {children}
         </CartContext.Provider>
     );

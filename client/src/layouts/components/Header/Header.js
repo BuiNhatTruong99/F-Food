@@ -26,6 +26,8 @@ import { logout } from '~/redux/user/userSlice';
 import Cart from '~/components/Cart/Cart';
 import path from '~/config/route';
 import CartContext from '~/contexts/CartContext';
+import WishList from '~/components/WishList/WishList';
+import WishListContext from '~/contexts/WishListContext';
 
 const cx = classNames.bind(style);
 
@@ -39,6 +41,7 @@ function Header() {
     const { firstname, lastname, avatar } = current || {}; // Destructure the current user object
     const { setIsCartOpen, cart } = useContext(CartContext);
     const numCartItems = current ? cart.length : 0; // Get the number of items in the cart
+    const { setIsWishListOpen } = useContext(WishListContext);
 
     useEffect(() => {
         if (loginStatus) {
@@ -64,8 +67,10 @@ function Header() {
     };
 
     const toggleCart = () => {
-        current && setIsCartOpen(true);
-        !current &&
+        if (current) {
+            setIsCartOpen(true);
+            setIsWishListOpen(false);
+        } else {
             Swal.fire({
                 text: 'Please login to continue',
                 cancelButtonText: 'Cancel',
@@ -75,6 +80,7 @@ function Header() {
             }).then((result) => {
                 if (result.isConfirmed) navigate(`/${path.LOGIN}`);
             });
+        }
     };
 
     return (
@@ -124,7 +130,10 @@ function Header() {
                                         <li className={cx('navbar__right-item')}>
                                             <FontAwesomeIcon icon={faUser} /> My account
                                         </li>
-                                        <li className={cx('navbar__right-item')}>
+                                        <li
+                                            className={cx('navbar__right-item')}
+                                            onClick={() => setIsWishListOpen(true)}
+                                        >
                                             <FontAwesomeIcon icon={faTags} />
                                             My wishlist
                                         </li>
@@ -144,6 +153,7 @@ function Header() {
                 </div>
             </header>
             <Cart />
+            <WishList />
         </>
     );
 }
