@@ -19,6 +19,11 @@ router.put("/current", verifyAccessToken, userController.updateUser);
 router.put("/address", verifyAccessToken, userController.updateUserAddress);
 router.put("/cart", verifyAccessToken, userController.updateUserCart);
 router.put(
+  "/cart/remove",
+  verifyAccessToken,
+  userController.removeItemFromCart
+);
+router.put(
   "/:_id",
   [verifyAccessToken, isAdmin],
   userController.updateUserByAdmin

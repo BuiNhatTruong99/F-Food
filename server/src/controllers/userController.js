@@ -420,6 +420,39 @@ class UserController {
     }
   });
 
+  // PUT : remove item from cart
+  removeItemFromCart = asyncHandler(async (req, res) => {
+    const { _id } = req.payload;
+    const { pid } = req.body;
+    if (!pid) throw new Error("Missing input");
+    const userCart = await User.findById(_id).select("cart");
+    const productInCart = await userCart.cart.find(
+      (item) => item.product.toString() === pid
+    );
+    if (productInCart) {
+      const response = await User.findByIdAndUpdate(
+        _id,
+        { $pull: { cart: { product: pid } } },
+        { safe: true, multi: false },
+        { new: true }
+      )
+        .populate({
+          path: "cart",
+          populate: { path: "product", select: "name price thumb" },
+        })
+        .select("-password -refreshToken -role");
+      return res.status(200).json({
+        success: response ? true : false,
+        updateUser: response ? response : "Something went wrong",
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in cart",
+      });
+    }
+  });
+
   // PUT : update avatar
   updateUserAvatar = asyncHandler(async (req, res) => {
     const { uid } = req.params;

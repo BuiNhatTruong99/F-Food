@@ -48,3 +48,10 @@ export const apiAddToCart = (data) =>
         url: '/user/cart',
         data,
     });
+
+export const apiRemoveFromCart = (data) =>
+    axios({
+        method: 'PUT',
+        url: '/user/cart/remove',
+        data,
+    });

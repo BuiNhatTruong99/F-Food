@@ -3,10 +3,13 @@ import { CiSquareRemove } from 'react-icons/ci';
 
 import classNames from 'classnames/bind';
 import style from './CartItem.module.scss';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { apiAddToCart, apiRemoveFromCart } from '~/apis/user';
+import CartContext from '~/contexts/CartContext';
 const cx = classNames.bind(style);
 
 function CartItem({ item }) {
+    const { setFlag } = useContext(CartContext);
     const [quantity, setQuantity] = useState(item.quantity);
 
     const handleChangeQuantity = useCallback(
@@ -17,6 +20,26 @@ function CartItem({ item }) {
         },
         [quantity],
     );
+    const pid = item.product._id;
+
+    const fetchCartQuantity = async () => {
+        const response = await apiAddToCart({ pid, quantity });
+        if (response.success) {
+            setFlag(true);
+        }
+    };
+
+    const fetchRemoveItemFromCart = async () => {
+        const response = await apiRemoveFromCart({ pid });
+        if (response.success) {
+            setFlag(true);
+        }
+    };
+
+    useEffect(() => {
+        fetchCartQuantity();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quantity]);
 
     return (
         <>
@@ -38,7 +61,7 @@ function CartItem({ item }) {
                     </div>
                 </div>
                 <div className={cx('cart__item-rm')}>
-                    <button className={cx('cart__item-btn--rm')}>
+                    <button className={cx('cart__item-btn--rm')} onClick={fetchRemoveItemFromCart}>
                         <CiSquareRemove />
                     </button>
                 </div>
