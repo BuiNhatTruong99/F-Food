@@ -24,7 +24,7 @@ export const WishListProvider = ({ children }) => {
         fetchWishListData();
         setFlagWl(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isWishListOpen, flagWl]);
+    }, [flagWl]);
 
     return (
         <WishListContext.Provider

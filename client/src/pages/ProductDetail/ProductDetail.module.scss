@@ -161,6 +161,13 @@
     }
 }
 
+.liked {
+    button {
+        background-color: var(--orange-color);
+        color: #fff;
+    }
+}
+
 .product-detail__info__delivery {
     margin-top: 15px;
 

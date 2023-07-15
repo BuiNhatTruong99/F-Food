@@ -66,12 +66,13 @@ function LoginForm() {
 
                 Toast({ type: 'success', message: 'Login success 👌' });
                 setTimeout(() => {
-                    navigate(path.routes.HOME); // Navigate to the HOME route after a delay
+                    window.location.href = `${path.routes.HOME}`; // Navigate to the HOME route after a delay
                 }, 2000);
             } else {
                 Toast({ type: 'warning', message: 'Login fail!' });
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [payload, isValid, dispatch, navigate, setSateLoggedIn]);
 
     return (

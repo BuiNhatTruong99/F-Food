@@ -37,7 +37,7 @@ function ProductDetail() {
     const [quantity, setQuantity] = useState(1);
     const [rating, setRating] = useState(null);
     const [comment, setComment] = useState('');
-    const { setFlagWl } = useContext(WishListContext);
+    const { setFlagWl, wishListContext } = useContext(WishListContext);
     let borderStar = Math.floor(5 - product?.totalRating) || 0;
     let halfStar = Math.ceil(5 - (product?.totalRating + borderStar)) || 0;
 
@@ -53,6 +53,10 @@ function ProductDetail() {
         if (pid) fetchProductData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pid]);
+
+    const checkIteminWishList = () => {
+        return wishListContext.some((item) => item._id === pid);
+    };
 
     const handleChangeThumbnail = (e) => {
         setThumbnail(e.target.src);
@@ -252,7 +256,11 @@ function ProductDetail() {
                                 <div className={cx('actions__add-cart')}>
                                     <PrimaryButton value={'ADD TO CART'} onClick={handleAddToCart} />
                                 </div>
-                                <div className={cx('actions__like')}>
+                                <div
+                                    className={
+                                        checkIteminWishList() ? cx('actions__like', 'liked') : cx('actions__like')
+                                    }
+                                >
                                     <button className={cx('like__button')} onClick={handleAddToWishList}>
                                         <FaRegHeart />
                                     </button>

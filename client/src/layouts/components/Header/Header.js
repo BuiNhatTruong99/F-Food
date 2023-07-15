@@ -63,6 +63,7 @@ function Header() {
     const handleLogout = () => {
         //clear local storage
         auth.setLoggedIn(!loginStatus); // Set the logged-in status to false
+        setIsWishListOpen(false); // Close the wishlist
         localStorage.removeItem('persist:FFood');
     };
 

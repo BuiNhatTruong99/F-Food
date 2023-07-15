@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FcLike } from 'react-icons/fc';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
@@ -25,12 +26,11 @@ function ProductItem() {
     const navigate = useNavigate();
     const { current } = useSelector((state) => state.user);
     const { setFlag } = useContext(CartContext);
-    const { setFlagWl } = useContext(WishListContext);
+    const { setFlagWl, wishListContext } = useContext(WishListContext);
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [counts, setCounts] = useState(0);
     const pagination = useContext(PaginationContext);
-
     const { selectCategories, selectedPrice, searchValue, selectedRate, featuredValue } = useSelector(
         (state) => state.app,
     );
@@ -43,7 +43,7 @@ function ProductItem() {
         let featuredParams = featuredValue ? { sort: featuredValue } : { sort: '-totalRating' };
         let pageParams = pagination.page ? { page: pagination.page } : { page: 1 };
 
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
         const response = await apiGetProducts({
@@ -60,6 +60,7 @@ function ProductItem() {
                 ...product,
                 favouritePro: product.totalRating >= 4,
                 numComments: product.ratings.length,
+                liked: wishListContext.some((item) => item._id === product._id),
             }));
             setProducts(updatedProducts);
             setCounts(response.counts);
@@ -70,7 +71,7 @@ function ProductItem() {
     useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectCategories, selectedPrice, searchValue, selectedRate, featuredValue, pagination.page]);
+    }, [selectCategories, selectedPrice, searchValue, selectedRate, featuredValue, pagination.page, wishListContext]);
 
     const handleAddToCart = async (pid) => {
         if (!current) {
@@ -145,11 +146,20 @@ function ProductItem() {
                                 <span
                                     className={
                                         product.favouritePro
-                                            ? cx('menu-prodcuts-new', 'new-tag')
-                                            : cx('menu-prodcuts-new')
+                                            ? cx('menu-prodcuts-recommend', 'tag')
+                                            : cx('menu-prodcuts-recommend')
                                     }
                                 >
-                                    Favourite
+                                    ✔ Recommend
+                                </span>
+                                <span
+                                    className={
+                                        product.liked
+                                            ? cx('menu-prodcuts-favourite', 'tag')
+                                            : cx('menu-prodcuts-favourite')
+                                    }
+                                >
+                                    <FcLike />
                                 </span>
                                 <div className={cx('menu-prodcuts-layout__hover-icon')}>
                                     <button
