@@ -69,3 +69,17 @@ export const apiRemoveFromWishList = (data) =>
         url: '/user/wishlist/remove',
         data,
     });
+
+export const apiUploadUserAvatar = (uid, avatar) =>
+    axios({
+        method: 'PUT',
+        url: '/user/uploadavatar/' + uid,
+        data: avatar,
+    });
+
+export const apiUpdateUserInfo = (data) =>
+    axios({
+        method: 'PUT',
+        url: '/user/updateinfo',
+        data,
+    });

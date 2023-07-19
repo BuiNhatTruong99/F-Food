@@ -9,12 +9,12 @@
     right: 0;
     z-index: 900;
     padding: 8px 0;
-    margin-top: 5px;
+    background-color: rgba(0, 0, 0, 0.84);
     transition: 0.2s ease-out;
 }
 .wrapper.sticky {
     margin-top: 0;
-    background-color: rgba(0, 0, 0, 0.84);
+    background-color: rgba(0, 0, 0, 0.94);
 }
 
 .inner {
@@ -195,48 +195,5 @@
 
     &:not(:last-child) {
         border-bottom: 1px solid rgba(0, 0, 0, 0.132);
-    }
-}
-
-@media (max-width: 600px) {
-    // Hide the navbar__left and navbar__right
-    .navbar__left,
-    .navbar__right {
-        display: none;
-    }
-
-    // Show the navigation links when the showMenu state is true
-    .navbar__left.show,
-    .navbar__right.show {
-        display: flex;
-    }
-
-    .menu-toggle {
-        position: absolute;
-        top: 15px;
-        left: 20px;
-        cursor: pointer;
-        z-index: 1000;
-
-        .toggle-line {
-            width: 25px;
-            height: 3px;
-            background-color: #fff;
-            margin: 5px 0;
-            transition: transform 0.3s;
-        }
-    }
-
-    // Rotate the toggle lines to create a cross icon
-    .menu-toggle.show .toggle-line:nth-child(1) {
-        transform: rotate(-45deg) translate(-5px, 5px);
-    }
-
-    .menu-toggle.show .toggle-line:nth-child(2) {
-        opacity: 0;
-    }
-
-    .menu-toggle.show .toggle-line:nth-child(3) {
-        transform: rotate(45deg) translate(-5px, -5px);
     }
 }

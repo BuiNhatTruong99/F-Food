@@ -11,6 +11,8 @@ import { LoginLayoutProvider } from './contexts/LoginLayoutContext';
 import { PaginationProvider } from './contexts/PaginationContext';
 import { CartProvider } from './contexts/CartContext';
 import { WishListProvider } from './contexts/WishListContext';
+import { MyAccountProvider } from './contexts/MyAccountContext';
+import { CheckoutProvider } from './contexts/CheckoutContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -24,9 +26,13 @@ root.render(
                         <LoginLayoutProvider>
                             <CartProvider>
                                 <WishListProvider>
-                                    <PaginationProvider>
-                                        <App />
-                                    </PaginationProvider>
+                                    <MyAccountProvider>
+                                        <CheckoutProvider>
+                                            <PaginationProvider>
+                                                <App />
+                                            </PaginationProvider>
+                                        </CheckoutProvider>
+                                    </MyAccountProvider>
                                 </WishListProvider>
                             </CartProvider>
                         </LoginLayoutProvider>

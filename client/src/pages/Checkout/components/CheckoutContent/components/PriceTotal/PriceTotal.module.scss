@@ -1,0 +1,25 @@
+.price-total {
+    color: var(--white);
+}
+
+.price-info {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.price-group {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title,
+    .value {
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+.total {
+    margin-top: 30px;
+    font-size: 2rem;
+}

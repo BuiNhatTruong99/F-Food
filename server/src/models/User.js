@@ -16,7 +16,7 @@ var userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://res.cloudinary.com/dgepjghio/image/upload/v1688823143/FAST_FOOD/i9z0avb93ozgfxsasywl.jpg",
+        "https://res.cloudinary.com/dgepjghio/image/upload/v1689597872/FFood_Avatar/tqt7un3igfu6crua6s9l.jpg",
     },
     email: {
       type: String,
@@ -44,6 +44,7 @@ var userSchema = new mongoose.Schema(
     ],
     address: {
       type: String,
+      default: "",
     },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     isBlocked: {

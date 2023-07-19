@@ -3,7 +3,7 @@ const router = express.Router();
 const { verifyAccessToken, isAdmin } = require("../middlewares/verifyToken");
 
 const userController = require("../controllers/userController");
-const uploadCloud = require("../config/cloudinary.config");
+const uploadAvatar = require("../config/cloudinary.config");
 
 router.post("/register", userController.register);
 router.get("/verifyregister/:token", userController.verifyRegister);
@@ -17,6 +17,7 @@ router.get("/", [verifyAccessToken, isAdmin], userController.getAllUser);
 router.delete("/", [verifyAccessToken, isAdmin], userController.deleteUser);
 router.put("/current", verifyAccessToken, userController.updateUser);
 router.put("/address", verifyAccessToken, userController.updateUserAddress);
+router.put("/updateinfo", verifyAccessToken, userController.updateUser);
 router.put("/cart", verifyAccessToken, userController.updateUserCart);
 router.put(
   "/cart/remove",
@@ -37,7 +38,7 @@ router.put(
 router.put(
   "/uploadavatar/:uid",
   verifyAccessToken,
-  uploadCloud.single("user-avatar"),
+  uploadAvatar.single("user-avatar"),
   userController.updateUserAvatar
 );
 

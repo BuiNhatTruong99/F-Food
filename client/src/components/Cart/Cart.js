@@ -8,10 +8,12 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useContext } from 'react';
 import CartContext from '~/contexts/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(style);
 
 function Cart() {
+    const navigate = useNavigate();
     const [cart, setCart] = useState([]);
     const cartData = useContext(CartContext);
     const { isCartOpen, setIsCartOpen } = cartData;
@@ -32,6 +34,11 @@ function Cart() {
     }, [isCartOpen, fetchCartData]);
     const handleClose = () => {
         setIsCartOpen(false);
+    };
+
+    const handleCheckout = () => {
+        setIsCartOpen(false);
+        navigate('/checkout');
     };
 
     return (
@@ -55,7 +62,7 @@ function Cart() {
                         <span className={cx('cart__handle-price')}>${totalPrice}</span>
                     </div>
                     <div className={cx('cart__handle-btn')}>
-                        <PrimaryButton value="Checkout" icon={<BsCart3 />} />
+                        <PrimaryButton value="Checkout" icon={<BsCart3 />} onClick={handleCheckout} />
                         <button className={cx('cart__handle-btn-more')}>Buy more</button>
                     </div>
                 </div>

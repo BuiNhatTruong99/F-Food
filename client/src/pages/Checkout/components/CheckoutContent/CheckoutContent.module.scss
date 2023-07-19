@@ -1,0 +1,14 @@
+.checkout-content {
+    margin: 0 40px;
+    padding: 40px 45px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+// responsive mobile
+@media (max-width: 768px) {
+    .checkout-content {
+        margin: 0;
+        padding: 20px 25px;
+    }
+}

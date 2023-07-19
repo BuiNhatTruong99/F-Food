@@ -1,0 +1,25 @@
+.my-account {
+    height: 100vh;
+    padding: 50px 0;
+    margin-top: 70px;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.menu-title {
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+/* Responsive styles for phones */
+@media (max-width: 600px) {
+    .my-account {
+        margin-top: 70px;
+        padding: 10px 0;
+    }
+
+    .menu-title {
+        display: none;
+    }
+    .bread-crumb {
+        display: none;
+    }
+}

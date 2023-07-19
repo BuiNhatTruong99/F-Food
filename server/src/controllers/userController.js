@@ -388,6 +388,34 @@ class UserController {
     });
   });
 
+  updateUser = asyncHandler(async (req, res) => {
+    const { _id } = req.payload;
+    const { firstname, lastname, address, mobile } = req.body;
+
+    // Ensure required fields are present
+    if (!firstname || !lastname || !mobile || !address) {
+      throw new Error("Missing input");
+    }
+
+    const response = await User.findByIdAndUpdate(
+      _id,
+      {
+        $set: {
+          firstname,
+          lastname,
+          address,
+          mobile,
+        },
+      },
+      { new: true }
+    ).select("-password -refreshToken -role");
+
+    return res.status(200).json({
+      success: response ? true : false,
+      updateUser: response ? response : "Something went wrong",
+    });
+  });
+
   // PUT : update cart
   updateUserCart = asyncHandler(async (req, res) => {
     const { _id } = req.payload;
