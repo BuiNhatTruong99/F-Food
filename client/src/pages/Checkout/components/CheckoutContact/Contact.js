@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@material-ui/core';
 import PrimaryButton from '~/components/PrimaryButton/PrimaryButton';
 import { Link } from 'react-router-dom';
@@ -9,30 +9,78 @@ import classNames from 'classnames/bind';
 import style from './Contact.module.scss';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { apiCreateOrder } from '~/apis/order';
+import Toast from '~/components/Toast';
+import { useContext } from 'react';
+import CheckoutContext from '~/contexts/CheckoutContext';
 
 const cx = classNames.bind(style);
 
 const schema = yup.object().shape({
-    firstName: yup.string().required('First name is required'),
-    lastName: yup.string().required('Last name is required'),
-    address: yup.string().required('Address is required'),
-    phoneNumber: yup
+    firstname: yup
         .string()
-        .required('Phone number is required')
-        .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
+        .required('This field is required')
+        .matches(/^[A-Za-z]+$/, 'First name must be letters only'),
+    lastname: yup
+        .string()
+        .required('This field is required')
+        .matches(/^[A-Za-z ]+$/, 'Last name must be letters only'),
+    mobile: yup
+        .string()
+        .required('Mobile Phone is required')
+        .matches(/^[0-9]{10}$/, 'Mobile Phone must be a 10-digit number'),
+    address: yup.string().required('Address is required'),
     paymentMethod: yup.string().required('Payment method is required'),
 });
 
 function Contact() {
     const { current } = useSelector((state) => state.user);
+    const [methodPayment, setMethodPayment] = useState('');
+    const { couponCode } = useContext(CheckoutContext);
+
+    useEffect(() => {
+        setDataDelivery(current);
+    }, [current]);
+
+    const [dataDelivery, setDataDelivery] = useState({
+        firstname: current.firstname,
+        lastname: current.lastname,
+        mobile: current.mobile,
+        address: current.address,
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setDataDelivery((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleMethodPayment = (e) => {
+        setMethodPayment(e.target.value);
+    };
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid },
     } = useForm({ resolver: yupResolver(schema) });
 
-    const onSubmit = () => {};
+    const onSubmit = async () => {
+        if (isValid) {
+            if (methodPayment === 'COD') {
+                const response = await apiCreateOrder(couponCode);
+                if (response.success) {
+                    Toast({ type: 'success', message: 'Order successfully' });
+                }
+            }
+
+            if (methodPayment === 'paypal') {
+                console.log('paypal');
+            }
+        }
+    };
 
     return (
         <div className={cx('contact')}>
@@ -63,28 +111,60 @@ function Contact() {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6} md={6}>
-                            <input type="text" placeholder="First name" {...register('firstName')} />
-                            {errors.firstName && <div className={cx('error-message')}>{errors.firstName.message}</div>}
+                            <input
+                                type="text"
+                                placeholder="First name"
+                                name="firstname"
+                                {...register('firstname')}
+                                value={dataDelivery.firstname || ''}
+                                onChange={handleInputChange}
+                            />
+                            {errors.firstName && <div className={cx('error-message')}>{errors.firstname.message}</div>}
                         </Grid>
                         <Grid item xs={12} sm={6} md={6}>
-                            <input type="text" placeholder="Last name" {...register('lastName')} />
-                            {errors.lastName && <div className={cx('error-message')}>{errors.lastName.message}</div>}
+                            <input
+                                type="text"
+                                placeholder="Last name"
+                                name="lastname"
+                                {...register('lastname')}
+                                value={dataDelivery.lastname || ''}
+                                onChange={handleInputChange}
+                            />
+                            {errors.lastName && <div className={cx('error-message')}>{errors.lastname.message}</div>}
                         </Grid>
                         <Grid item xs={12} sm={12} md={12}>
-                            <input type="text" placeholder="Address" {...register('address')} />
+                            <input
+                                type="text"
+                                placeholder="Address"
+                                {...register('address')}
+                                name="address"
+                                value={dataDelivery.address || ''}
+                                onChange={handleInputChange}
+                            />
                             {errors.address && <div className={cx('error-message')}>{errors.address.message}</div>}
                         </Grid>
                         <Grid item xs={12} sm={6} md={6}>
-                            <input type="text" placeholder="Phone number" {...register('phoneNumber')} />
-                            {errors.phoneNumber && (
-                                <div className={cx('error-message')}>{errors.phoneNumber.message}</div>
-                            )}
+                            <input
+                                type="text"
+                                placeholder="Phone number"
+                                {...register('mobile')}
+                                name="mobile"
+                                value={dataDelivery.mobile || ''}
+                                onChange={handleInputChange}
+                            />
+                            {errors.mobile && <div className={cx('error-message')}>{errors.mobile.message}</div>}
                         </Grid>
                         <Grid item xs={12} sm={6} md={6}>
-                            <select id="paymentMethod" name="paymentMethod" {...register('paymentMethod')}>
+                            <select
+                                id="paymentMethod"
+                                name="paymentMethod"
+                                {...register('paymentMethod')}
+                                value={methodPayment}
+                                onChange={handleMethodPayment}
+                            >
                                 <option value="">Select payment method</option>
                                 <option value="paypal">PayPal</option>
-                                <option value="bank_transfer">Ship COD</option>
+                                <option value="COD">Ship COD</option>
                                 {/* Add more payment methods here */}
                             </select>
                             {errors.paymentMethod && (

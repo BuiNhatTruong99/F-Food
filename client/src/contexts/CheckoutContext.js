@@ -10,20 +10,24 @@ export const CheckoutProvider = ({ children }) => {
 
     const [couponValue, setCouponValue] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [couponCode, setCouponCode] = useState('');
 
     useEffect(() => {
-        setTotalPrice(
+        const discountedTotalPrice =
             cart
                 ?.map((item) => {
                     return item.quantity * item.product.price;
                 })
                 .reduce((currentValue, totalValue) => currentValue + totalValue, 0) *
-                ((100 - couponValue) / 100),
-        );
+            ((100 - couponValue) / 100);
+
+        setTotalPrice(discountedTotalPrice.toFixed(2));
     }, [couponValue, cart]);
 
     return (
-        <CheckoutContext.Provider value={{ couponValue, setCouponValue, totalPrice, setTotalPrice }}>
+        <CheckoutContext.Provider
+            value={{ couponValue, setCouponValue, totalPrice, setTotalPrice, couponCode, setCouponCode }}
+        >
             {children}
         </CheckoutContext.Provider>
     );

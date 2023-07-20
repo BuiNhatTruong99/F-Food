@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames/bind';
 import style from './Coupon.module.scss';
 import PrimaryButton from '~/components/PrimaryButton/PrimaryButton';
@@ -8,25 +8,24 @@ import { apiGetCoupon } from '~/apis/coupon';
 const cx = classNames.bind(style);
 
 function Coupon() {
-    const { setCouponValue } = useContext(CheckoutContext);
-    const [couponName, setCouponName] = useState('');
+    const { setCouponValue, couponCode, setCouponCode } = useContext(CheckoutContext);
 
     const handleApplyCoupon = async () => {
         // Use inputCouponCode instead of couponCode
-        const response = await apiGetCoupon(couponName);
+        const response = await apiGetCoupon(couponCode);
         if (response.success) {
             setCouponValue(response.coupon.discount);
         }
     };
 
     const handleChange = (e) => {
-        setCouponName(e.target.value);
+        setCouponCode(e.target.value);
     };
 
     return (
         <div className={cx('coupon')}>
             {/* Use inputCouponCode for the value and add onChange to update the state */}
-            <input type="text" placeholder="Gift card or discount code" value={couponName} onChange={handleChange} />
+            <input type="text" placeholder="Gift card or discount code" value={couponCode} onChange={handleChange} />
             <PrimaryButton value={'APPLY'} onClick={handleApplyCoupon} />
         </div>
     );

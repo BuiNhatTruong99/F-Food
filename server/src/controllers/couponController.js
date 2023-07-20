@@ -55,8 +55,8 @@ class CouponController {
 
   // GET : get a coupon
   getCoupon = asyncHandler(async (req, res) => {
-    const { name } = req.body;
-    const response = await Coupon.findOne({ name: name });
+    const { couponCode } = req.body;
+    const response = await Coupon.findOne({ name: couponCode });
 
     res.status(200).json({
       success: response ? true : false,
