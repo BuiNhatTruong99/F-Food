@@ -11,6 +11,7 @@ export const CheckoutProvider = ({ children }) => {
     const [couponValue, setCouponValue] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [couponCode, setCouponCode] = useState('');
+    const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
     useEffect(() => {
         const discountedTotalPrice =
@@ -26,7 +27,16 @@ export const CheckoutProvider = ({ children }) => {
 
     return (
         <CheckoutContext.Provider
-            value={{ couponValue, setCouponValue, totalPrice, setTotalPrice, couponCode, setCouponCode }}
+            value={{
+                couponValue,
+                setCouponValue,
+                totalPrice,
+                setTotalPrice,
+                couponCode,
+                setCouponCode,
+                checkoutSuccess,
+                setCheckoutSuccess,
+            }}
         >
             {children}
         </CheckoutContext.Provider>

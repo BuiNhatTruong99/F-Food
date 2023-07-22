@@ -21,7 +21,6 @@
         height: 60px;
         border-radius: 50%;
         overflow: hidden;
-        margin-right: 20px;
         float: left;
 
         img {
@@ -34,6 +33,7 @@
     .contact__head-info {
         display: flex;
         flex-direction: column;
+        margin-left: 20px;
 
         .infomation {
             display: flex;
@@ -81,12 +81,14 @@
 
     .actions {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
 
         .btn-back {
             display: flex;
             align-items: center;
+            justify-content: flex-start;
+            width: 100%;
             font-weight: 500;
             font-size: 1.3rem;
             color: var(--orange-color);
@@ -94,6 +96,13 @@
             svg {
                 font-weight: bold;
             }
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
         }
     }
 }
@@ -103,4 +112,11 @@
     font-size: 1.2rem;
     font-weight: 500;
     margin-top: 5px;
+}
+
+//responsive for mobile
+@media screen and (max-width: 768px) {
+    .contact {
+        padding: 0;
+    }
 }

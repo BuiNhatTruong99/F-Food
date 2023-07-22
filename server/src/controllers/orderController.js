@@ -7,7 +7,7 @@ class OrderController {
   // POST : create a new order
   createOrder = asyncHandler(async (req, res) => {
     const { _id } = req.payload;
-    const { couponCode } = req.body;
+    const { couponCode, methodPayment } = req.body;
     const userCart = await User.findById(_id)
       .select("cart")
       .populate("cart.product", "name price thumb");
@@ -21,7 +21,12 @@ class OrderController {
       (sum, item) => sum + item.product.price * item.quantity,
       0
     );
-    const orderData = { products, total, orderedBy: _id };
+    const orderData = {
+      products,
+      total,
+      orderedBy: _id,
+      methodPayment: methodPayment,
+    };
     // if user has coupon, apply discount
     if (couponCode) {
       const selectCoupon = await Coupon.findOne({ name: couponCode });

@@ -18,29 +18,29 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <GlobalStyles>
-                    <AuthProvider>
-                        <LoginLayoutProvider>
-                            <CartProvider>
-                                <WishListProvider>
-                                    <MyAccountProvider>
-                                        <CheckoutProvider>
-                                            <PaginationProvider>
-                                                <App />
-                                            </PaginationProvider>
-                                        </CheckoutProvider>
-                                    </MyAccountProvider>
-                                </WishListProvider>
-                            </CartProvider>
-                        </LoginLayoutProvider>
-                    </AuthProvider>
-                </GlobalStyles>
-            </PersistGate>
-        </Provider>
-    </React.StrictMode>,
+    // <React.StrictMode>
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+            <GlobalStyles>
+                <AuthProvider>
+                    <LoginLayoutProvider>
+                        <CartProvider>
+                            <WishListProvider>
+                                <MyAccountProvider>
+                                    <CheckoutProvider>
+                                        <PaginationProvider>
+                                            <App />
+                                        </PaginationProvider>
+                                    </CheckoutProvider>
+                                </MyAccountProvider>
+                            </WishListProvider>
+                        </CartProvider>
+                    </LoginLayoutProvider>
+                </AuthProvider>
+            </GlobalStyles>
+        </PersistGate>
+    </Provider>,
+    // </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

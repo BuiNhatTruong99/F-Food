@@ -1,8 +1,8 @@
 import axios from '~/ultils/axios';
 
-export const apiCreateOrder = (couponCode) =>
+export const apiCreateOrder = (couponCode, methodPayment) =>
     axios({
         method: 'POST',
         url: '/order',
-        data: { couponCode },
+        data: { couponCode, methodPayment },
     });
