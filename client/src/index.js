@@ -13,6 +13,11 @@ import { CartProvider } from './contexts/CartContext';
 import { WishListProvider } from './contexts/WishListContext';
 import { MyAccountProvider } from './contexts/MyAccountContext';
 import { CheckoutProvider } from './contexts/CheckoutContext';
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
+
+if (process.env.NODE_ENV === 'production') {
+    disableReactDevTools();
+}
 
 const container = document.getElementById('root');
 const root = createRoot(container);
