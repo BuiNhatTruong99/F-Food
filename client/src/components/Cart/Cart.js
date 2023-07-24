@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import CartContext from '~/contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
+import CheckoutContext from '~/contexts/CheckoutContext';
 
 const cx = classNames.bind(style);
 
@@ -17,6 +18,7 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const cartData = useContext(CartContext);
     const { isCartOpen, setIsCartOpen } = cartData;
+    const { setCheckoutSuccess } = useContext(CheckoutContext);
 
     let totalPrice = cart
         ?.map((item) => {
@@ -38,6 +40,7 @@ function Cart() {
 
     const handleCheckout = () => {
         setIsCartOpen(false);
+        setCheckoutSuccess(false);
         navigate('/checkout');
     };
 

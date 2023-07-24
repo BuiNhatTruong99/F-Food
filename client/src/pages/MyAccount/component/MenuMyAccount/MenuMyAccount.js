@@ -13,7 +13,7 @@ const cx = classNames.bind(style);
 
 const menu = [
     { id: 1, name: 'My Account', icon: <AiOutlineInfoCircle />, layout: 'myaccount' },
-    { id: 2, name: 'My Orders', icon: <CiDeliveryTruck />, layout: 'myorder' },
+    { id: 2, name: 'My Orders', icon: <CiDeliveryTruck />, layout: 'myorders' },
     { id: 3, name: 'Change Password', icon: <PiPasswordDuotone />, layout: 'changepassword' },
 ];
 

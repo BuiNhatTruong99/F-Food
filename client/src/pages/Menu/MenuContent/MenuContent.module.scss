@@ -133,3 +133,22 @@
     visibility: visible;
     transform: translateY(0);
 }
+
+@media (max-width: 600px) {
+    .menu-content {
+        margin-top: 15px;
+    }
+
+    .menu-handle {
+        margin-bottom: 20px;
+        display: block;
+
+        .menu-handle__search {
+            margin: 0 0 10px 0;
+        }
+
+        .menu-handle__featured {
+            margin: 0;
+        }
+    }
+}

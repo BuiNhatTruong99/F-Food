@@ -105,19 +105,19 @@ function Header() {
                     <div className={cx('navbar__left', showMenu ? 'show' : '')}>
                         <ul className={cx('navbar__list')}>
                             <Link className={cx('navbar__item')} to="/">
-                                <FontAwesomeIcon icon={faHome} /> Home
+                                <FontAwesomeIcon icon={faHome} /> <span>Home</span>
                             </Link>
                             <Link className={cx('navbar__item')} to="/menu">
                                 <FontAwesomeIcon icon={faUtensils} />
-                                Menu
+                                <span>Menu</span>
                             </Link>
                             <Link className={cx('navbar__item')} to="/news">
                                 <FontAwesomeIcon icon={faNewspaper} />
-                                News
+                                <span>News</span>
                             </Link>
                             <Link className={cx('navbar__item')} to="/store-system">
                                 <FontAwesomeIcon icon={faStore} />
-                                Store locations
+                                <span>Store locations</span>
                             </Link>
                         </ul>
                     </div>

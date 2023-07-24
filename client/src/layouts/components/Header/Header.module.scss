@@ -199,16 +199,55 @@
 }
 
 @media (max-width: 600px) {
+    .inner {
+        padding: 0 0 0 20px;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .navbar__item {
+        span {
+            display: none;
+        }
+    }
+
     // Hide the navbar__left and navbar__right
     .navbar__left,
-    .navbar__right {
+    .navbar__username {
         display: none;
+    }
+
+    .navbar__cart {
+        svg {
+            font-size: 1.8rem;
+        }
+
+        .navbar__cart_qty {
+            min-width: 2rem;
+            position: absolute;
+            right: -3px;
+            bottom: 0px;
+            font-size: 1.3rem;
+        }
+    }
+
+    .navbar__login {
+        margin-left: 10px;
+
+        .navbar__avatar {
+            width: 40px;
+            height: 40px;
+        }
     }
 
     // Show the navigation links when the showMenu state is true
     .navbar__left.show,
     .navbar__right.show {
         display: flex;
+        height: 100%;
+        margin: 0;
     }
 
     .menu-toggle {

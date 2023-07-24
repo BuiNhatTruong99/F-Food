@@ -1,0 +1,73 @@
+// TableOfOrders.scss
+
+// Define styles for the table
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        font-size: 14px; // Decrease font size for smaller screens
+    }
+}
+
+// Define styles for the table header
+thead {
+    background-color: #f2f2f2;
+
+    @media (max-width: 768px) {
+        display: none; // Hide the table header for smaller screens
+    }
+}
+
+tr th {
+    text-align: center;
+}
+
+th {
+    padding: 10px;
+    text-align: left;
+
+    @media (max-width: 768px) {
+        padding: 5px; // Decrease padding for smaller screens
+    }
+}
+
+// Define styles for the table body
+tbody {
+    tr {
+        &:nth-child(odd) {
+            background-color: #e6e6e6;
+        }
+
+        td {
+            padding: 15px;
+
+            @media (max-width: 768px) {
+                padding: 5px; // Decrease padding for smaller screens
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        display: block; // Convert table rows to block elements for smaller screens
+    }
+}
+
+.td-btn {
+    padding: 4px 10px;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    background-color: var(--orange-color);
+    color: var(--white);
+}
+
+.order__detail {
+    visibility: hidden;
+}
+
+.active {
+    visibility: visible;
+}

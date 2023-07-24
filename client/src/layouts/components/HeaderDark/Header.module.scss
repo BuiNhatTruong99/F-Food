@@ -197,3 +197,85 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.132);
     }
 }
+
+@media (max-width: 600px) {
+    .inner {
+        padding: 0 0 0 20px;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .navbar__item {
+        span {
+            display: none;
+        }
+    }
+
+    // Hide the navbar__left and navbar__right
+    .navbar__left,
+    .navbar__username {
+        display: none;
+    }
+
+    .navbar__cart {
+        svg {
+            font-size: 1.8rem;
+        }
+
+        .navbar__cart_qty {
+            min-width: 2rem;
+            position: absolute;
+            right: -3px;
+            bottom: 0px;
+            font-size: 1.3rem;
+        }
+    }
+
+    .navbar__login {
+        margin-left: 10px;
+
+        .navbar__avatar {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    // Show the navigation links when the showMenu state is true
+    .navbar__left.show,
+    .navbar__right.show {
+        display: flex;
+        height: 100%;
+        margin: 0;
+    }
+
+    .menu-toggle {
+        position: absolute;
+        top: 15px;
+        left: 20px;
+        cursor: pointer;
+        z-index: 1000;
+
+        .toggle-line {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px 0;
+            transition: transform 0.3s;
+        }
+    }
+
+    // Rotate the toggle lines to create a cross icon
+    .menu-toggle.show .toggle-line:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 5px);
+    }
+
+    .menu-toggle.show .toggle-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.show .toggle-line:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -5px);
+    }
+}

@@ -31,7 +31,7 @@ import WishListContext from '~/contexts/WishListContext';
 
 const cx = classNames.bind(style);
 
-function HeaderDark() {
+function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const auth = useContext(AuthContext);
@@ -42,6 +42,12 @@ function HeaderDark() {
     const { setIsCartOpen, cart } = useContext(CartContext);
     const numCartItems = current ? cart.length : 0; // Get the number of items in the cart
     const { setIsWishListOpen } = useContext(WishListContext);
+
+    const [showMenu, setShowMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setShowMenu(!showMenu);
+    };
 
     useEffect(() => {
         if (loginStatus) {
@@ -88,25 +94,30 @@ function HeaderDark() {
         <>
             <header className={sticky ? cx('wrapper', 'sticky') : cx('wrapper')}>
                 <div className={cx('inner')}>
+                    <div className={cx('menu-toggle')} onClick={toggleMenu}>
+                        <div className={cx('toggle-line')}></div>
+                        <div className={cx('toggle-line')}></div>
+                        <div className={cx('toggle-line')}></div>
+                    </div>
                     <Link className={cx('logo')} to="/">
                         <img src={images.logo} alt="FFood" />
                     </Link>
-                    <div className={cx('navbar__left')}>
+                    <div className={cx('navbar__left', showMenu ? 'show' : '')}>
                         <ul className={cx('navbar__list')}>
                             <Link className={cx('navbar__item')} to="/">
-                                <FontAwesomeIcon icon={faHome} /> Home
+                                <FontAwesomeIcon icon={faHome} /> <span>Home</span>
                             </Link>
                             <Link className={cx('navbar__item')} to="/menu">
                                 <FontAwesomeIcon icon={faUtensils} />
-                                Menu
+                                <span>Menu</span>
                             </Link>
                             <Link className={cx('navbar__item')} to="/news">
                                 <FontAwesomeIcon icon={faNewspaper} />
-                                News
+                                <span>News</span>
                             </Link>
                             <Link className={cx('navbar__item')} to="/store-system">
                                 <FontAwesomeIcon icon={faStore} />
-                                Store locations
+                                <span>Store locations</span>
                             </Link>
                         </ul>
                     </div>
@@ -159,4 +170,4 @@ function HeaderDark() {
     );
 }
 
-export default HeaderDark;
+export default Header;

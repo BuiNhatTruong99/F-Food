@@ -77,3 +77,20 @@
         margin-right: 20px;
     }
 }
+
+@media (max-width: 600px) {
+    .inner {
+        padding: 0;
+    }
+
+    .footer__content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+    }
+
+    .footer__content-item {
+        width: 100%;
+    }
+}

@@ -114,3 +114,24 @@ $login-banner: url('../../assets/images/login-thumb.png');
         }
     }
 }
+
+@media (max-width: 600px) {
+    // style.module.scss
+
+    .login-container {
+        // Adjust styles for smaller screens (xs breakpoint)
+        display: flex;
+        align-items: center;
+
+        // ... (rest of the styles for .login-container)
+    }
+
+    .login-thumb {
+        display: none; // Hide the login thumb image on smaller screens
+    }
+
+    .login-content {
+        width: 100%; // Make the login content take up the full width of the screen
+        padding: 60px 20px; // Adjust the padding to make it look better on smaller screens
+    }
+}

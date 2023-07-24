@@ -179,3 +179,9 @@
     margin-right: 5px;
     color: var(--orange-color);
 }
+
+@media (max-width: 600px) {
+    .menu-products-layout {
+        padding: 0 60px;
+    }
+}

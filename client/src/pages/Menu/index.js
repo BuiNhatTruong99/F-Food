@@ -11,6 +11,7 @@ import MenuContent from './MenuContent/MenuContent';
 import { setSelectedCategory, setSelectedPrice, setSelectedRate } from '~/redux/appSlice';
 import CheckBox from '~/components/CheckBox';
 import MenuBanner from '~/components/MenuBanner/MenuBanner';
+import { Grid } from '@material-ui/core';
 
 const cx = classNames.bind(style);
 const priceOptions = [
@@ -41,8 +42,8 @@ function Menu() {
         <section className={cx('menu')}>
             <MenuBanner />
             <Container className={cx('menu__layout')}>
-                <div className={cx('menu__container')}>
-                    <div className={cx('menu-filters')}>
+                <Grid className={cx('menu__container')}>
+                    <Grid item xs={12} md={2} className={cx('menu-filters')}>
                         <h2 className={cx('menu-filters__title')}>Foods</h2>
                         <div className={cx('menu-filters__foods')}>
                             {categories?.map((prodCategory) => (
@@ -64,43 +65,51 @@ function Menu() {
                                 </NavLink>
                             ))}
                         </div>
-                        <h2 className={cx('menu-filters__title')}>Price</h2>
-                        <form className={cx('menu-filters__price')}>
-                            {priceOptions.map(({ content, range }) => (
-                                <CheckBox
-                                    key={content}
-                                    value={content}
-                                    content={content}
-                                    handleOptionClick={() => dispatch(setSelectedPrice(range))}
-                                />
-                            ))}
-                        </form>
-                        <h2 className={cx('menu-filters__title')}>Rate</h2>
-                        {starFilters.map((filter) => (
-                            <div
-                                key={filter.key}
-                                className={
-                                    activeRate === filter.key
-                                        ? cx('shop-filters__stars', 'rate-selected')
-                                        : cx('shop-filters__stars')
-                                }
-                                onClick={() => {
-                                    dispatch(setSelectedRate(filter.range));
-                                    setActiveRate(filter.key);
-                                }}
-                            >
-                                {Array.from({ length: filter.filledStars }, (_, index) => (
-                                    <StartIcon key={`filled-${filter.key}-${index}`} />
-                                ))}
-                                {Array.from({ length: filter.borderStars }, (_, index) => (
-                                    <StartBorderIcon key={`border-${filter.key}-${index}`} />
-                                ))}
-                                <span>&amp; up</span>
+                        <div className={cx('menu-filters__flex')}>
+                            <div className={cx('menu-filters__price-wrap')}>
+                                <h2 className={cx('menu-filters__title')}>Price</h2>
+                                <form className={cx('menu-filters__price')}>
+                                    {priceOptions.map(({ content, range }) => (
+                                        <CheckBox
+                                            key={content}
+                                            value={content}
+                                            content={content}
+                                            handleOptionClick={() => dispatch(setSelectedPrice(range))}
+                                        />
+                                    ))}
+                                </form>
                             </div>
-                        ))}
-                    </div>
-                    <MenuContent />
-                </div>
+                            <div className={cx('shop-filters__stars-wrap')}>
+                                <h2 className={cx('menu-filters__title')}>Rate</h2>
+                                {starFilters.map((filter) => (
+                                    <div
+                                        key={filter.key}
+                                        className={
+                                            activeRate === filter.key
+                                                ? cx('shop-filters__stars', 'rate-selected')
+                                                : cx('shop-filters__stars')
+                                        }
+                                        onClick={() => {
+                                            dispatch(setSelectedRate(filter.range));
+                                            setActiveRate(filter.key);
+                                        }}
+                                    >
+                                        {Array.from({ length: filter.filledStars }, (_, index) => (
+                                            <StartIcon key={`filled-${filter.key}-${index}`} />
+                                        ))}
+                                        {Array.from({ length: filter.borderStars }, (_, index) => (
+                                            <StartBorderIcon key={`border-${filter.key}-${index}`} />
+                                        ))}
+                                        <span>&amp; up</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} md={10}>
+                        <MenuContent />
+                    </Grid>
+                </Grid>
             </Container>
         </section>
     );

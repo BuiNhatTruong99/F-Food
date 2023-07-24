@@ -84,3 +84,57 @@
         color: var(--orange-color);
     }
 }
+
+@media (max-width: 600px) {
+    .menu__layout {
+        padding: 0 5px;
+    }
+
+    .menu-filters__item-name {
+        display: none;
+    }
+
+    .menu__container {
+        display: block; // Stack the Grid items vertically on smaller screens
+    }
+
+    .menu-filters {
+        width: 100%; // Take up the full width of the screen on smaller screens
+    }
+
+    .menu-filters__title {
+        text-align: center; // Center align the titles on smaller screens
+    }
+
+    .menu-filters__foods,
+    .menu-filters__price,
+    .menu-filters__price label,
+    .menu-filters__price input,
+    .menu-filters__price button {
+        width: 100%; // Take up the full width of the screen on smaller screens
+    }
+
+    .menu-filters__foods {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; // Center the food categories on smaller screens
+    }
+
+    .menu-filters__item {
+        margin: 5px; // Add some spacing between the food categories
+    }
+
+    .menu-filters__item-name {
+        margin-top: 5px; // Add some spacing between the food category name and the image
+    }
+
+    .shop-filters__stars {
+        display: flex;
+        justify-content: center; // Center the rate filters on smaller screens
+    }
+
+    .menu-filters__flex {
+        display: flex;
+        justify-content: space-between;
+    }
+}

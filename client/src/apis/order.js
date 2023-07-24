@@ -6,3 +6,9 @@ export const apiCreateOrder = (couponCode, methodPayment) =>
         url: '/order',
         data: { couponCode, methodPayment },
     });
+
+export const apiGetOrders = () =>
+    axios({
+        method: 'GET',
+        url: '/order',
+    });

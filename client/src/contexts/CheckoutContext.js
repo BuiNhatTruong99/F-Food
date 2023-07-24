@@ -25,6 +25,10 @@ export const CheckoutProvider = ({ children }) => {
         setTotalPrice(discountedTotalPrice.toFixed(2));
     }, [couponValue, cart]);
 
+    useEffect(() => {
+        // setCheckoutSuccess(false);
+    }, [checkoutSuccess]);
+
     return (
         <CheckoutContext.Provider
             value={{

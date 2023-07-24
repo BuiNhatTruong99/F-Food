@@ -73,3 +73,9 @@
     color: rgba(0, 0, 0, 0.4);
     line-height: 2.5rem;
 }
+
+@media (max-width: 600px) {
+    .avatar__email {
+        display: none;
+    }
+}
