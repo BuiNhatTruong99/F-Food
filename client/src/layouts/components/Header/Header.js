@@ -111,11 +111,11 @@ function Header() {
                                 <FontAwesomeIcon icon={faUtensils} />
                                 <span>Menu</span>
                             </Link>
-                            <Link className={cx('navbar__item')} to="/news">
+                            <Link className={cx('navbar__item')} to="/">
                                 <FontAwesomeIcon icon={faNewspaper} />
                                 <span>News</span>
                             </Link>
-                            <Link className={cx('navbar__item')} to="/store-system">
+                            <Link className={cx('navbar__item')} to="/">
                                 <FontAwesomeIcon icon={faStore} />
                                 <span>Store locations</span>
                             </Link>
