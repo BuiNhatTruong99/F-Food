@@ -37,6 +37,9 @@ class UserController {
         httpOnly: true,
         secure: true,
         maxAge: 15 * 60 * 1000,
+        sameSite: "none",
+        domain: process.env.CLIENT_URL,
+        path: "/",
       }
     );
 
@@ -46,6 +49,7 @@ class UserController {
     return res.status(200).json({
       success: true,
       message: "Please check your email to verify your account",
+      cookie: req.cookies,
     });
   });
 

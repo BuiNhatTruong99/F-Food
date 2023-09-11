@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "db_ffood_user",
-    "password": "p86HOz0iCEoizzOk30SST0yOiqbC5JVt",
-    "database": "db_ffood",
-    "host": "dpg-civ88095rnuhcnrb3a30-a.singapore-postgres.render.com",
+    "username": "db_ffood_b08p_user",
+    "password": "vSzbJ2qkgwebLtbBasxvanrH3Alzxe5W",
+    "database": "db_ffood_b08p",
+    "host": "dpg-cj0ctgs07spl5oohhvl0-a.singapore-postgres.render.com",
     "dialect": "postgres",
     "logging": false,
     "dialectOptions": {
@@ -14,10 +14,10 @@
     }
   },
   "production": {
-    "username": "db_ffood_user",
-    "password": "p86HOz0iCEoizzOk30SST0yOiqbC5JVt",
-    "database": "db_ffood",
-    "host": "dpg-civ88095rnuhcnrb3a30-a.singapore-postgres.render.com",
+    "username": "db_ffood_b08p_user",
+    "password": "vSzbJ2qkgwebLtbBasxvanrH3Alzxe5W",
+    "database": "db_ffood_b08p",
+    "host": "dpg-cj0ctgs07spl5oohhvl0-a.singapore-postgres.render.com",
     "dialect": "postgres",
     "logging": false,
     "dialectOptions": {

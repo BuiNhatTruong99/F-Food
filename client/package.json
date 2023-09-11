@@ -23,6 +23,7 @@
         "moment": "^2.29.4",
         "normalize.css": "^8.0.1",
         "persist": "^0.2.7",
+        "postcss": "^8.4.27",
         "postcss-loader": "^3.0.0",
         "react": "^18.2.0",
         "react-bootstrap": "^2.7.4",
@@ -46,6 +47,7 @@
         "yup": "^1.2.0"
     },
     "devDependencies": {
+        "autoprefixer": "^9.0.0",
         "babel-plugin-module-resolver": "^5.0.0",
         "customize-cra": "^1.0.0",
         "react-app-rewired": "^2.2.1",

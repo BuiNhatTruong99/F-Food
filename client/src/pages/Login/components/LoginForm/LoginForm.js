@@ -39,8 +39,8 @@ function LoginForm() {
     } = useForm({ resolver: yupResolver(schema) });
 
     const [payload, setPayload] = useState({
-        email: '',
-        password: '',
+        email: 'json@gmail.com',
+        password: '123123a',
     });
 
     const onHandleSubmit = () => {
