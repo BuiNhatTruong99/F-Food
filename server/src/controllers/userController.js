@@ -29,7 +29,9 @@ class UserController {
         user,
       });
     }
-    const token = makeToken();
+    const token = jwt.sign({ ...req.body }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
     res.cookie(
       "data_register",
       { ...req.body, token },
